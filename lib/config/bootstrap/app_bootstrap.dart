@@ -23,8 +23,8 @@ abstract final class AppBootstrap {
   }
 
   static Future<void> _initSupabase() async {
-    final url = AppEnv.supabaseUrl.trim();
-    final anonKey = AppEnv.supabaseAnonKey.trim();
+    final String url = AppEnv.supabaseUrl.trim();
+    final String anonKey = AppEnv.supabaseAnonKey.trim();
     if (url.isEmpty || anonKey.isEmpty) return;
 
     try {
@@ -35,4 +35,3 @@ abstract final class AppBootstrap {
     }
   }
 }
-

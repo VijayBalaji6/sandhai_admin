@@ -1,7 +1,8 @@
-import 'package:QuIDPe/src/common/widgets/custom_text/custom_text.dart';
-import 'package:QuIDPe/src/config/design_system/color/app_color.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../../../config/theme/app_colors.dart';
+import '../custom_text/custom_text.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({

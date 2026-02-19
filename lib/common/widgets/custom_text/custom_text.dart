@@ -1,6 +1,7 @@
-import 'package:QuIDPe/src/common/utils/number_formatter_utils.dart';
-import 'package:QuIDPe/src/config/design_system/color/app_color.dart';
 import 'package:flutter/material.dart';
+
+import '../../../config/theme/app_colors.dart';
+import '../../utils/number_formatter_utils.dart';
 
 class CustomText extends StatelessWidget {
   const CustomText({

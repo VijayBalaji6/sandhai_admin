@@ -1,5 +1,6 @@
-import 'package:QuIDPe/src/config/design_system/color/app_color.dart';
 import 'package:flutter/material.dart';
+
+import '../../../config/theme/app_colors.dart';
 
 class CustomScaffold extends StatelessWidget {
   const CustomScaffold({
