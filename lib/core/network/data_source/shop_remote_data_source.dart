@@ -1,4 +1,5 @@
 import '../core/api_result.dart';
+import '../core/api_exception.dart';
 import '../core/supabase_api.dart';
 import '../dtos/shop_model.dart';
 

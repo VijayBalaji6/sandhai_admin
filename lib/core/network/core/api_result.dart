@@ -1,41 +1,42 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:sandhai_admin/core/network/core/api_exception.dart';
 
-part 'api_result.freezed.dart';
+/// Represents the result of an API/network call.
+sealed class ApiResult<T> {
+  const ApiResult();
 
-@freezed
-abstract class ApiResult<T> with _$ApiResult<T> {
   const factory ApiResult.success(T data) = ApiSuccess<T>;
   const factory ApiResult.failure(ApiException exception) = ApiFailure<T>;
+
+  TResult when<TResult>({
+    required TResult Function(T data) success,
+    required TResult Function(ApiException exception) failure,
+  });
 }
 
-class ApiException {
-  const ApiException({
-    required this.message,
-    this.statusCode,
-    this.code,
-    this.details,
-    this.hint,
-    this.originalError,
-  });
+final class ApiSuccess<T> extends ApiResult<T> {
+  const ApiSuccess(this.data);
 
-  final String message;
-  final int? statusCode;
-  final String? code;
-  final String? details;
-  final String? hint;
-  final Object? originalError;
-
-  bool get isNotFound => statusCode == 404 || code == 'PGRST116';
-  bool get isUnauthorized => statusCode == 401;
-  bool get isForbidden => statusCode == 403;
-  bool get isConflict => statusCode == 409 || code == '23505';
-  bool get isNetworkError => statusCode == null && originalError is! FormatException;
+  final T data;
 
   @override
-  String toString() => 'ApiException('
-      'message: $message, '
-      'statusCode: $statusCode, '
-      'code: $code, '
-      'details: $details, '
-      'hint: $hint)';
+  TResult when<TResult>({
+    required TResult Function(T data) success,
+    required TResult Function(ApiException exception) failure,
+  }) {
+    return success(data);
+  }
+}
+
+final class ApiFailure<T> extends ApiResult<T> {
+  const ApiFailure(this.exception);
+
+  final ApiException exception;
+
+  @override
+  TResult when<TResult>({
+    required TResult Function(T data) success,
+    required TResult Function(ApiException exception) failure,
+  }) {
+    return failure(exception);
+  }
 }
