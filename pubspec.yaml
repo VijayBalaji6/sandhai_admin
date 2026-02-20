@@ -28,6 +28,10 @@ dependencies:
   firebase_core: ^4.4.0
   firebase_remote_config: ^6.1.4
 
+  # Serialization
+  freezed_annotation: ^3.0.0
+  json_annotation: ^4.9.0
+
   # Utilities
   intl: ^0.20.2
   connectivity_plus: ^7.0.0
@@ -37,6 +41,11 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+
+  # Code generation
+  build_runner: ^2.4.14
+  freezed: ^3.0.4
+  json_serializable: ^6.9.4
 
 flutter:
   uses-material-design: true

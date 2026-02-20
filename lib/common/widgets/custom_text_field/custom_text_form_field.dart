@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
+class CustomTextFormField extends StatelessWidget {
+  const CustomTextFormField({
     super.key,
     required this.controller,
     this.labelText,
@@ -11,8 +11,13 @@ class CustomTextField extends StatelessWidget {
     this.autoFocus = false,
     this.inputFormatters,
     this.style,
+    this.validator,
+    this.maxLines = 1,
     this.onChanged,
-    this.onSubmitted,
+    this.onFieldSubmitted,
+    this.readOnly = false,
+    this.onTap,
+    this.suffixIcon,
   });
 
   final TextEditingController controller;
@@ -22,38 +27,48 @@ class CustomTextField extends StatelessWidget {
   final bool autoFocus;
   final List<TextInputFormatter>? inputFormatters;
   final TextStyle? style;
+  final String? Function(String?)? validator;
+  final int maxLines;
   final void Function(String)? onChanged;
-  final void Function(String)? onSubmitted;
+  final void Function(String)? onFieldSubmitted;
+  final bool readOnly;
+  final VoidCallback? onTap;
+  final Widget? suffixIcon;
 
   @override
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    return TextField(
+
+    return TextFormField(
       controller: controller,
       autofocus: autoFocus,
       style: style ?? TextStyle(color: colorScheme.onSurface),
       keyboardType: keyboardType,
       cursorColor: colorScheme.primary,
       inputFormatters: inputFormatters,
-      onChanged: (value) => onChanged?.call(value),
-      onSubmitted: onSubmitted,
+      validator: validator,
+      maxLines: maxLines,
+      onChanged: onChanged,
+      onFieldSubmitted: onFieldSubmitted,
+      readOnly: readOnly,
+      onTap: onTap,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: colorScheme.outlineVariant),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: BorderSide(
-            color: colorScheme.primary,
-          ), // Highlight when focused
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: colorScheme.primary),
         ),
         border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: colorScheme.outlineVariant),
         ),
         hintText: hintText,
         labelText: labelText,
-        contentPadding: const EdgeInsets.only(left: 12),
+        suffixIcon: suffixIcon,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         hintStyle: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w500,

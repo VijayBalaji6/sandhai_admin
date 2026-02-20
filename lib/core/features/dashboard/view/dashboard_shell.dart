@@ -1,23 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sandhai_admin/common/widgets/custom_scaffold/custom_scaffold.dart';
+import 'package:sandhai_admin/core/features/dashboard/view/nav_item.dart';
 import 'package:sandhai_admin/core/features/dashboard/view/nav_tile.dart';
 
 class DashboardShell extends StatelessWidget {
-  DashboardShell({super.key, required this.navigationShell});
+  const DashboardShell({super.key, required this.navigationShell});
 
   final StatefulNavigationShell navigationShell;
-
-  final List<NavItem> _items = <NavItem>[
-    NavItem(
-      Icons.local_grocery_store_outlined,
-      Icons.local_grocery_store,
-      'Products',
-    ),
-    NavItem(Icons.receipt_long_outlined, Icons.receipt_long, 'Orders'),
-    NavItem(Icons.history_outlined, Icons.history, 'History'),
-    NavItem(Icons.storefront_outlined, Icons.storefront, 'Shop'),
-    NavItem(Icons.people_outline, Icons.people, 'Users'),
-  ];
 
   void _onTap(int index) => navigationShell.goBranch(
     index,
@@ -28,8 +18,7 @@ class DashboardShell extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
 
-    return Scaffold(
-      backgroundColor: colorScheme.surfaceContainerLowest,
+    return CustomScaffold(
       body: Stack(
         children: [
           Positioned.fill(child: navigationShell),
@@ -58,9 +47,9 @@ class DashboardShell extends StatelessWidget {
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: List.generate(_items.length, (i) {
-                    final item = _items[i];
-                    final selected = i == navigationShell.currentIndex;
+                  children: List.generate(navItems.length, (i) {
+                    final NavItem item = navItems[i];
+                    final bool selected = i == navigationShell.currentIndex;
                     return NavTile(
                       item: item,
                       selected: selected,

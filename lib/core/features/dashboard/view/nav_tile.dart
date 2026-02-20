@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-
-class NavItem {
-  const NavItem(this.icon, this.selectedIcon, this.label);
-  final IconData icon;
-  final IconData selectedIcon;
-  final String label;
-}
+import 'package:sandhai_admin/core/features/dashboard/view/nav_item.dart';
 
 class NavTile extends StatelessWidget {
   const NavTile({
