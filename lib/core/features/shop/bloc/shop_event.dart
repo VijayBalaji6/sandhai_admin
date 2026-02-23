@@ -66,22 +66,22 @@ final class ShopAcceptsOrdersToggled extends ShopEvent {
   List<Object> get props => [acceptsOrders];
 }
 
-final class ShopPincodeAdded extends ShopEvent {
-  const ShopPincodeAdded(this.pincode);
+final class ShopPinCodeAdded extends ShopEvent {
+  const ShopPinCodeAdded(this.pinCode);
 
-  final String pincode;
+  final String pinCode;
 
   @override
-  List<Object> get props => [pincode];
+  List<Object> get props => [pinCode];
 }
 
-final class ShopPincodeRemoved extends ShopEvent {
-  const ShopPincodeRemoved(this.pincode);
+final class ShopPinCodeRemoved extends ShopEvent {
+  const ShopPinCodeRemoved(this.pinCode);
 
-  final String pincode;
+  final String pinCode;
 
   @override
-  List<Object> get props => [pincode];
+  List<Object> get props => [pinCode];
 }
 
 final class ShopMessageCleared extends ShopEvent {

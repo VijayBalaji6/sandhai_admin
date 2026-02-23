@@ -13,7 +13,7 @@ _ShopModel _$ShopModelFromJson(Map<String, dynamic> json) => _ShopModel(
   phone: json['phone'] as String,
   email: json['email'] as String?,
   address: json['address'] as String?,
-  serviceablePincodes: (json['serviceable_pincodes'] as List<dynamic>)
+  serviceablePinCodes: (json['serviceable_pincodes'] as List<dynamic>)
       .map((e) => e as String)
       .toList(),
   openingTime: json['opening_time'] as String,

@@ -64,7 +64,9 @@ class _ShopPageState extends State<ShopPage> {
   void _addPincode() {
     final String value = _pinCodeController.text.trim();
     final ShopModel? shop = _currentShop;
-    if (shop == null || value.isEmpty || shop.serviceablePinCodes.contains(value)) {
+    if (shop == null ||
+        value.isEmpty ||
+        shop.serviceablePinCodes.contains(value)) {
       return;
     }
     _shopBloc.add(ShopPincodeAdded(value));
@@ -72,7 +74,7 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   void _removePincode(String value) {
-    _shopBloc.add(ShopPincodeRemoved(value));
+    _shopBloc.add(ShopPincodeRemoved.ShopPinCodeRemoved(value));
   }
 
   void _save() {
@@ -146,16 +148,16 @@ class _ShopPageState extends State<ShopPage> {
           }
 
           if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage!)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
             _shopBloc.add(const ShopMessageCleared());
           }
 
           if (state.successMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.successMessage!)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.successMessage!)));
             _shopBloc.add(const ShopMessageCleared());
           }
         },
@@ -366,7 +368,7 @@ class _ShopPageState extends State<ShopPage> {
                 ),
               ),
             ),
-          ),
+          );
         },
       ),
     );

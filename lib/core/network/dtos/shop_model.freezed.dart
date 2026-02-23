@@ -37,7 +37,7 @@ int get hashCode => Object.hash(runtimeType,id,shopName,shopDescription,phone,em
 
 @override
 String toString() {
-  return 'ShopModel(id: $id, shopName: $shopName, shopDescription: $shopDescription, phone: $phone, email: $email, address: $address, serviceablePincodes: $serviceablePinCodes, openingTime: $openingTime, closingTime: $closingTime, isActive: $isActive, acceptsOrders: $acceptsOrders, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'ShopModel(id: $id, shopName: $shopName, shopDescription: $shopDescription, phone: $phone, email: $email, address: $address, serviceablePinCodes: $serviceablePinCodes, openingTime: $openingTime, closingTime: $closingTime, isActive: $isActive, acceptsOrders: $acceptsOrders, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ShopModelCopyWith<$Res>  {
   factory $ShopModelCopyWith(ShopModel value, $Res Function(ShopModel) _then) = _$ShopModelCopyWithImpl;
 @useResult
 $Res call({
- String id,@JsonKey(name: 'shop_name') String shopName,@JsonKey(name: 'shop_description') String? shopDescription, String phone, String? email, String? address,@JsonKey(name: 'serviceable_pincodes') List<String> serviceablePincodes,@JsonKey(name: 'opening_time') String openingTime,@JsonKey(name: 'closing_time') String closingTime,@JsonKey(name: 'is_active') bool isActive,@JsonKey(name: 'accepts_orders') bool acceptsOrders,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ String id,@JsonKey(name: 'shop_name') String shopName,@JsonKey(name: 'shop_description') String? shopDescription, String phone, String? email, String? address,@JsonKey(name: 'serviceable_pincodes') List<String> serviceablePinCodes,@JsonKey(name: 'opening_time') String openingTime,@JsonKey(name: 'closing_time') String closingTime,@JsonKey(name: 'is_active') bool isActive,@JsonKey(name: 'accepts_orders') bool acceptsOrders,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 
@@ -65,7 +65,7 @@ class _$ShopModelCopyWithImpl<$Res>
 
 /// Create a copy of ShopModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? shopName = null,Object? shopDescription = freezed,Object? phone = null,Object? email = freezed,Object? address = freezed,Object? serviceablePincodes = null,Object? openingTime = null,Object? closingTime = null,Object? isActive = null,Object? acceptsOrders = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? shopName = null,Object? shopDescription = freezed,Object? phone = null,Object? email = freezed,Object? address = freezed,Object? serviceablePinCodes = null,Object? openingTime = null,Object? closingTime = null,Object? isActive = null,Object? acceptsOrders = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,shopName: null == shopName ? _self.shopName : shopName // ignore: cast_nullable_to_non_nullable
@@ -73,7 +73,7 @@ as String,shopDescription: freezed == shopDescription ? _self.shopDescription : 
 as String?,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
 as String,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String?,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
-as String?,serviceablePincodes: null == serviceablePincodes ? _self.serviceablePinCodes : serviceablePincodes // ignore: cast_nullable_to_non_nullable
+as String?,serviceablePinCodes: null == serviceablePinCodes ? _self.serviceablePinCodes : serviceablePinCodes // ignore: cast_nullable_to_non_nullable
 as List<String>,openingTime: null == openingTime ? _self.openingTime : openingTime // ignore: cast_nullable_to_non_nullable
 as String,closingTime: null == closingTime ? _self.closingTime : closingTime // ignore: cast_nullable_to_non_nullable
 as String,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
@@ -165,7 +165,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'shop_name')  String shopName, @JsonKey(name: 'shop_description')  String? shopDescription,  String phone,  String? email,  String? address, @JsonKey(name: 'serviceable_pincodes')  List<String> serviceablePincodes, @JsonKey(name: 'opening_time')  String openingTime, @JsonKey(name: 'closing_time')  String closingTime, @JsonKey(name: 'is_active')  bool isActive, @JsonKey(name: 'accepts_orders')  bool acceptsOrders, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'shop_name')  String shopName, @JsonKey(name: 'shop_description')  String? shopDescription,  String phone,  String? email,  String? address, @JsonKey(name: 'serviceable_pincodes')  List<String> serviceablePinCodes, @JsonKey(name: 'opening_time')  String openingTime, @JsonKey(name: 'closing_time')  String closingTime, @JsonKey(name: 'is_active')  bool isActive, @JsonKey(name: 'accepts_orders')  bool acceptsOrders, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ShopModel() when $default != null:
 return $default(_that.id,_that.shopName,_that.shopDescription,_that.phone,_that.email,_that.address,_that.serviceablePinCodes,_that.openingTime,_that.closingTime,_that.isActive,_that.acceptsOrders,_that.createdAt,_that.updatedAt);case _:
@@ -186,7 +186,7 @@ return $default(_that.id,_that.shopName,_that.shopDescription,_that.phone,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'shop_name')  String shopName, @JsonKey(name: 'shop_description')  String? shopDescription,  String phone,  String? email,  String? address, @JsonKey(name: 'serviceable_pincodes')  List<String> serviceablePincodes, @JsonKey(name: 'opening_time')  String openingTime, @JsonKey(name: 'closing_time')  String closingTime, @JsonKey(name: 'is_active')  bool isActive, @JsonKey(name: 'accepts_orders')  bool acceptsOrders, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'shop_name')  String shopName, @JsonKey(name: 'shop_description')  String? shopDescription,  String phone,  String? email,  String? address, @JsonKey(name: 'serviceable_pincodes')  List<String> serviceablePinCodes, @JsonKey(name: 'opening_time')  String openingTime, @JsonKey(name: 'closing_time')  String closingTime, @JsonKey(name: 'is_active')  bool isActive, @JsonKey(name: 'accepts_orders')  bool acceptsOrders, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _ShopModel():
 return $default(_that.id,_that.shopName,_that.shopDescription,_that.phone,_that.email,_that.address,_that.serviceablePinCodes,_that.openingTime,_that.closingTime,_that.isActive,_that.acceptsOrders,_that.createdAt,_that.updatedAt);case _:
@@ -206,7 +206,7 @@ return $default(_that.id,_that.shopName,_that.shopDescription,_that.phone,_that.
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'shop_name')  String shopName, @JsonKey(name: 'shop_description')  String? shopDescription,  String phone,  String? email,  String? address, @JsonKey(name: 'serviceable_pincodes')  List<String> serviceablePincodes, @JsonKey(name: 'opening_time')  String openingTime, @JsonKey(name: 'closing_time')  String closingTime, @JsonKey(name: 'is_active')  bool isActive, @JsonKey(name: 'accepts_orders')  bool acceptsOrders, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'shop_name')  String shopName, @JsonKey(name: 'shop_description')  String? shopDescription,  String phone,  String? email,  String? address, @JsonKey(name: 'serviceable_pincodes')  List<String> serviceablePinCodes, @JsonKey(name: 'opening_time')  String openingTime, @JsonKey(name: 'closing_time')  String closingTime, @JsonKey(name: 'is_active')  bool isActive, @JsonKey(name: 'accepts_orders')  bool acceptsOrders, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _ShopModel() when $default != null:
 return $default(_that.id,_that.shopName,_that.shopDescription,_that.phone,_that.email,_that.address,_that.serviceablePinCodes,_that.openingTime,_that.closingTime,_that.isActive,_that.acceptsOrders,_that.createdAt,_that.updatedAt);case _:
@@ -221,7 +221,7 @@ return $default(_that.id,_that.shopName,_that.shopDescription,_that.phone,_that.
 @JsonSerializable()
 
 class _ShopModel implements ShopModel {
-  const _ShopModel({required this.id, @JsonKey(name: 'shop_name') required this.shopName, @JsonKey(name: 'shop_description') this.shopDescription, required this.phone, this.email, this.address, @JsonKey(name: 'serviceable_pincodes') required final  List<String> serviceablePincodes, @JsonKey(name: 'opening_time') required this.openingTime, @JsonKey(name: 'closing_time') required this.closingTime, @JsonKey(name: 'is_active') this.isActive = true, @JsonKey(name: 'accepts_orders') this.acceptsOrders = true, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt}): _serviceablePincodes = serviceablePincodes;
+  const _ShopModel({required this.id, @JsonKey(name: 'shop_name') required this.shopName, @JsonKey(name: 'shop_description') this.shopDescription, required this.phone, this.email, this.address, @JsonKey(name: 'serviceable_pincodes') required final  List<String> serviceablePinCodes, @JsonKey(name: 'opening_time') required this.openingTime, @JsonKey(name: 'closing_time') required this.closingTime, @JsonKey(name: 'is_active') this.isActive = true, @JsonKey(name: 'accepts_orders') this.acceptsOrders = true, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt}): _serviceablePinCodes = serviceablePinCodes;
   factory _ShopModel.fromJson(Map<String, dynamic> json) => _$ShopModelFromJson(json);
 
 @override final  String id;
@@ -230,11 +230,11 @@ class _ShopModel implements ShopModel {
 @override final  String phone;
 @override final  String? email;
 @override final  String? address;
- final  List<String> _serviceablePincodes;
+ final  List<String> _serviceablePinCodes;
 @override@JsonKey(name: 'serviceable_pincodes') List<String> get serviceablePinCodes {
-  if (_serviceablePincodes is EqualUnmodifiableListView) return _serviceablePincodes;
+  if (_serviceablePinCodes is EqualUnmodifiableListView) return _serviceablePinCodes;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_serviceablePincodes);
+  return EqualUnmodifiableListView(_serviceablePinCodes);
 }
 
 @override@JsonKey(name: 'opening_time') final  String openingTime;
@@ -257,16 +257,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ShopModel&&(identical(other.id, id) || other.id == id)&&(identical(other.shopName, shopName) || other.shopName == shopName)&&(identical(other.shopDescription, shopDescription) || other.shopDescription == shopDescription)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.address, address) || other.address == address)&&const DeepCollectionEquality().equals(other._serviceablePincodes, _serviceablePincodes)&&(identical(other.openingTime, openingTime) || other.openingTime == openingTime)&&(identical(other.closingTime, closingTime) || other.closingTime == closingTime)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.acceptsOrders, acceptsOrders) || other.acceptsOrders == acceptsOrders)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ShopModel&&(identical(other.id, id) || other.id == id)&&(identical(other.shopName, shopName) || other.shopName == shopName)&&(identical(other.shopDescription, shopDescription) || other.shopDescription == shopDescription)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.email, email) || other.email == email)&&(identical(other.address, address) || other.address == address)&&const DeepCollectionEquality().equals(other._serviceablePinCodes, _serviceablePinCodes)&&(identical(other.openingTime, openingTime) || other.openingTime == openingTime)&&(identical(other.closingTime, closingTime) || other.closingTime == closingTime)&&(identical(other.isActive, isActive) || other.isActive == isActive)&&(identical(other.acceptsOrders, acceptsOrders) || other.acceptsOrders == acceptsOrders)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,shopName,shopDescription,phone,email,address,const DeepCollectionEquality().hash(_serviceablePincodes),openingTime,closingTime,isActive,acceptsOrders,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,shopName,shopDescription,phone,email,address,const DeepCollectionEquality().hash(_serviceablePinCodes),openingTime,closingTime,isActive,acceptsOrders,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'ShopModel(id: $id, shopName: $shopName, shopDescription: $shopDescription, phone: $phone, email: $email, address: $address, serviceablePincodes: $serviceablePinCodes, openingTime: $openingTime, closingTime: $closingTime, isActive: $isActive, acceptsOrders: $acceptsOrders, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'ShopModel(id: $id, shopName: $shopName, shopDescription: $shopDescription, phone: $phone, email: $email, address: $address, serviceablePinCodes: $serviceablePinCodes, openingTime: $openingTime, closingTime: $closingTime, isActive: $isActive, acceptsOrders: $acceptsOrders, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -277,7 +277,7 @@ abstract mixin class _$ShopModelCopyWith<$Res> implements $ShopModelCopyWith<$Re
   factory _$ShopModelCopyWith(_ShopModel value, $Res Function(_ShopModel) _then) = __$ShopModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id,@JsonKey(name: 'shop_name') String shopName,@JsonKey(name: 'shop_description') String? shopDescription, String phone, String? email, String? address,@JsonKey(name: 'serviceable_pincodes') List<String> serviceablePincodes,@JsonKey(name: 'opening_time') String openingTime,@JsonKey(name: 'closing_time') String closingTime,@JsonKey(name: 'is_active') bool isActive,@JsonKey(name: 'accepts_orders') bool acceptsOrders,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ String id,@JsonKey(name: 'shop_name') String shopName,@JsonKey(name: 'shop_description') String? shopDescription, String phone, String? email, String? address,@JsonKey(name: 'serviceable_pincodes') List<String> serviceablePinCodes,@JsonKey(name: 'opening_time') String openingTime,@JsonKey(name: 'closing_time') String closingTime,@JsonKey(name: 'is_active') bool isActive,@JsonKey(name: 'accepts_orders') bool acceptsOrders,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 
@@ -294,7 +294,7 @@ class __$ShopModelCopyWithImpl<$Res>
 
 /// Create a copy of ShopModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? shopName = null,Object? shopDescription = freezed,Object? phone = null,Object? email = freezed,Object? address = freezed,Object? serviceablePincodes = null,Object? openingTime = null,Object? closingTime = null,Object? isActive = null,Object? acceptsOrders = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? shopName = null,Object? shopDescription = freezed,Object? phone = null,Object? email = freezed,Object? address = freezed,Object? serviceablePinCodes = null,Object? openingTime = null,Object? closingTime = null,Object? isActive = null,Object? acceptsOrders = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_ShopModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,shopName: null == shopName ? _self.shopName : shopName // ignore: cast_nullable_to_non_nullable
@@ -302,7 +302,7 @@ as String,shopDescription: freezed == shopDescription ? _self.shopDescription : 
 as String?,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
 as String,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
 as String?,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
-as String?,serviceablePincodes: null == serviceablePincodes ? _self._serviceablePincodes : serviceablePincodes // ignore: cast_nullable_to_non_nullable
+as String?,serviceablePinCodes: null == serviceablePinCodes ? _self._serviceablePinCodes : serviceablePinCodes // ignore: cast_nullable_to_non_nullable
 as List<String>,openingTime: null == openingTime ? _self.openingTime : openingTime // ignore: cast_nullable_to_non_nullable
 as String,closingTime: null == closingTime ? _self.closingTime : closingTime // ignore: cast_nullable_to_non_nullable
 as String,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable

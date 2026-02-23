@@ -18,8 +18,8 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
     on<ShopWorkingHoursUpdated>(_onWorkingHoursUpdated);
     on<ShopActiveToggled>(_onActiveToggled);
     on<ShopAcceptsOrdersToggled>(_onAcceptsOrdersToggled);
-    on<ShopPincodeAdded>(_onPincodeAdded);
-    on<ShopPincodeRemoved>(_onPincodeRemoved);
+    on<ShopPinCodeAdded>(_onPinCodeAdded);
+    on<ShopPinCodeRemoved>(_onPinCodeRemoved);
     on<ShopMessageCleared>(_onMessageCleared);
   }
 
@@ -83,7 +83,11 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
           : event.address?.trim(),
     );
 
-    await _persistShop(emit, updatedShop, successMessage: 'Shop details updated');
+    await _persistShop(
+      emit,
+      updatedShop,
+      successMessage: 'Shop details updated',
+    );
   }
 
   Future<void> _onWorkingHoursUpdated(
@@ -112,7 +116,9 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
     final ShopModel? currentShop = state.shop;
     if (currentShop == null) return;
 
-    final ShopModel updatedShop = currentShop.copyWith(isActive: event.isActive);
+    final ShopModel updatedShop = currentShop.copyWith(
+      isActive: event.isActive,
+    );
     await _persistShop(
       emit,
       updatedShop,
@@ -142,58 +148,55 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
     );
   }
 
-  Future<void> _onPincodeAdded(
-    ShopPincodeAdded event,
+  Future<void> _onPinCodeAdded(
+    ShopPinCodeAdded event,
     Emitter<ShopState> emit,
   ) async {
     final ShopModel? currentShop = state.shop;
     if (currentShop == null) return;
 
-    final String pincode = event.pincode.trim();
-    if (pincode.isEmpty || currentShop.serviceablePinCodes.contains(pincode)) {
+    final String pinCode = event.pinCode.trim();
+    if (pinCode.isEmpty || currentShop.serviceablePinCodes.contains(pinCode)) {
       return;
     }
 
     final ShopModel updatedShop = currentShop.copyWith(
-      serviceablePincodes: <String>[
+      serviceablePinCodes: <String>[
         ...currentShop.serviceablePinCodes,
-        pincode,
+        pinCode,
       ],
     );
 
     await _persistShop(
       emit,
       updatedShop,
-      successMessage: 'Pincode added successfully',
+      successMessage: 'PinCode added successfully',
     );
   }
 
-  Future<void> _onPincodeRemoved(
-    ShopPincodeRemoved event,
+  Future<void> _onPinCodeRemoved(
+    ShopPinCodeRemoved event,
     Emitter<ShopState> emit,
   ) async {
     final ShopModel? currentShop = state.shop;
     if (currentShop == null) return;
 
-    final List<String> updatedPincodes = currentShop.serviceablePinCodes
-        .where((String code) => code != event.pincode)
+    final List<String> updatedPinCodes = currentShop.serviceablePinCodes
+        .where((String code) => code != event.pinCode)
         .toList();
 
     final ShopModel updatedShop = currentShop.copyWith(
-      serviceablePincodes: updatedPincodes,
+      serviceablePinCodes: updatedPinCodes,
     );
 
     await _persistShop(
       emit,
       updatedShop,
-      successMessage: 'Pincode removed successfully',
+      successMessage: 'PinCode removed successfully',
     );
   }
 
-  void _onMessageCleared(
-    ShopMessageCleared event,
-    Emitter<ShopState> emit,
-  ) {
+  void _onMessageCleared(ShopMessageCleared event, Emitter<ShopState> emit) {
     emit(state.copyWith(clearError: true, clearSuccess: true));
   }
 
@@ -211,7 +214,9 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
       ),
     );
 
-    final ApiResult<ShopModel> result = await _repository.updateShop(updatedShop);
+    final ApiResult<ShopModel> result = await _repository.updateShop(
+      updatedShop,
+    );
 
     result.when(
       success: (ShopModel shop) {

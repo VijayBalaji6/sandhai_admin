@@ -12,7 +12,8 @@ abstract class ShopModel with _$ShopModel {
     required String phone,
     String? email,
     String? address,
-    @JsonKey(name: 'serviceable_pincodes') required List<String> serviceablePincodes,
+    @JsonKey(name: 'serviceable_pincodes')
+    required List<String> serviceablePinCodes,
     @JsonKey(name: 'opening_time') required String openingTime,
     @JsonKey(name: 'closing_time') required String closingTime,
     @JsonKey(name: 'is_active') @Default(true) bool isActive,
