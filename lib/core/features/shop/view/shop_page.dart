@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sandhai_admin/common/widgets/custom_text/custom_text.dart';
 
 import '../../../../common/widgets/custom_app_bar/custom_app_bar.dart';
 import '../../../../common/widgets/custom_scaffold/custom_scaffold.dart';
@@ -61,7 +62,7 @@ class _ShopPageState extends State<ShopPage> {
     _closingTimeController.text = shop.closingTime;
   }
 
-  void _addPincode() {
+  void _addPinCode() {
     final String value = _pinCodeController.text.trim();
     final ShopModel? shop = _currentShop;
     if (shop == null ||
@@ -69,12 +70,12 @@ class _ShopPageState extends State<ShopPage> {
         shop.serviceablePinCodes.contains(value)) {
       return;
     }
-    _shopBloc.add(ShopPincodeAdded(value));
+    _shopBloc.add(ShopPinCodeAdded(value));
     _pinCodeController.clear();
   }
 
-  void _removePincode(String value) {
-    _shopBloc.add(ShopPincodeRemoved.ShopPinCodeRemoved(value));
+  void _removePinCode(String value) {
+    _shopBloc.add(ShopPinCodeRemoved(value));
   }
 
   void _save() {
@@ -296,7 +297,7 @@ class _ShopPageState extends State<ShopPage> {
                       ),
                     ),
                     SectionCard(
-                      title: 'Serviceable Pincodes',
+                      title: 'Serviceable Pin codes',
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -305,19 +306,19 @@ class _ShopPageState extends State<ShopPage> {
                               Expanded(
                                 child: CustomTextField(
                                   controller: _pinCodeController,
-                                  labelText: 'Add Pincode',
-                                  hintText: 'Enter 6-digit pincode',
+                                  labelText: 'Add Pin Code',
+                                  hintText: 'Enter 6-digit Pin Code',
                                   keyboardType: TextInputType.number,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.digitsOnly,
                                     LengthLimitingTextInputFormatter(6),
                                   ],
-                                  onSubmitted: (_) => _addPincode(),
+                                  onSubmitted: (_) => _addPinCode(),
                                 ),
                               ),
                               const SizedBox(width: 12),
                               ElevatedButton(
-                                onPressed: _addPincode,
+                                onPressed: _addPinCode,
                                 child: const Text('Add'),
                               ),
                             ],
@@ -327,11 +328,11 @@ class _ShopPageState extends State<ShopPage> {
                             spacing: 8,
                             runSpacing: 8,
                             children: shop.serviceablePinCodes.map((
-                              String pincode,
+                              String pinCode,
                             ) {
                               return Chip(
-                                label: Text(pincode),
-                                onDeleted: () => _removePincode(pincode),
+                                label: Text(pinCode),
+                                onDeleted: () => _removePinCode(pinCode),
                               );
                             }).toList(),
                           ),
@@ -340,26 +341,33 @@ class _ShopPageState extends State<ShopPage> {
                     ),
                     SectionCard(
                       title: 'Shop Controls',
-                      child: Column(
+                      child: Row(
+                        spacing: 50,
                         children: [
-                          SwitchListTile(
-                            contentPadding: EdgeInsets.zero,
-                            title: const Text('Shop Active'),
-                            subtitle: const Text('Enable or disable the shop'),
-                            value: shop.isActive,
-                            onChanged: (bool value) =>
-                                _shopBloc.add(ShopActiveToggled(value)),
-                          ),
-                          const Divider(),
-                          SwitchListTile(
-                            contentPadding: EdgeInsets.zero,
-                            title: const Text('Accept Orders'),
-                            subtitle: const Text(
-                              'Allow customers to place orders',
+                          Expanded(
+                            child: SwitchListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: const CustomText(text: 'Shop Active'),
+                              subtitle: const CustomText(
+                                text: 'Enable or disable the shop',
+                              ),
+                              value: shop.isActive,
+                              onChanged: (bool value) =>
+                                  _shopBloc.add(ShopActiveToggled(value)),
                             ),
-                            value: shop.acceptsOrders,
-                            onChanged: (bool value) =>
-                                _shopBloc.add(ShopAcceptsOrdersToggled(value)),
+                          ),
+                          Expanded(
+                            child: SwitchListTile(
+                              contentPadding: EdgeInsets.zero,
+                              title: const CustomText(text: 'Accept Orders'),
+                              subtitle: const CustomText(
+                                text: 'Allow customers to place orders',
+                              ),
+                              value: shop.acceptsOrders,
+                              onChanged: (bool value) => _shopBloc.add(
+                                ShopAcceptsOrdersToggled(value),
+                              ),
+                            ),
                           ),
                         ],
                       ),

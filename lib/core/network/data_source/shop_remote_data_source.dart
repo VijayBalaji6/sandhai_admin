@@ -4,9 +4,7 @@ import '../core/supabase_api.dart';
 import '../dtos/shop_model.dart';
 
 class ShopRemoteDataSource {
-  ShopRemoteDataSource({SupabaseApi? api}) : _api = api ?? SupabaseApi('shop');
-
-  final SupabaseApi _api;
+  final SupabaseApi _api = SupabaseApi('shop');
 
   Future<ApiResult<ShopModel>> fetchShop() async {
     final ApiResult<List<ShopModel>> result = await _api.getAll<ShopModel>(
@@ -34,10 +32,7 @@ class ShopRemoteDataSource {
   }
 
   Future<ApiResult<ShopModel>> fetchShopById(String id) {
-    return _api.getById<ShopModel>(
-      id: id,
-      fromJson: ShopModel.fromJson,
-    );
+    return _api.getById<ShopModel>(id: id, fromJson: ShopModel.fromJson);
   }
 
   Future<ApiResult<ShopModel>> updateShop({

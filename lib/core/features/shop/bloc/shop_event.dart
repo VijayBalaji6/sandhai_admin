@@ -13,7 +13,7 @@ final class ShopFetchRequested extends ShopEvent {
   final String? shopId;
 
   @override
-  List<Object?> get props => [shopId];
+  List<Object> get props => [shopId!];
 }
 
 final class ShopProfileUpdated extends ShopEvent {
@@ -32,7 +32,13 @@ final class ShopProfileUpdated extends ShopEvent {
   final String? address;
 
   @override
-  List<Object?> get props => [shopName, shopDescription, phone, email, address];
+  List<Object> get props => [
+    shopName,
+    shopDescription!,
+    phone,
+    email!,
+    address!,
+  ];
 }
 
 final class ShopWorkingHoursUpdated extends ShopEvent {

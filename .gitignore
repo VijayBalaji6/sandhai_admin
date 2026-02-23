@@ -1,45 +1,183 @@
-# Miscellaneous
-*.class
-*.log
-*.pyc
-*.swp
-.DS_Store
-.atom/
-.build/
-.buildlog/
-.history
-.svn/
-.swiftpm/
-migrate_working_dir/
-
-# IntelliJ related
-*.iml
-*.ipr
-*.iws
-.idea/
-
-# The .vscode folder contains launch configuration and tasks you configure in
-# VS Code which you may wish to be included in version control, so this line
-# is commented out by default.
-#.vscode/
 
 # Flutter/Dart/Pub related
-**/doc/api/
-**/ios/Flutter/.last_build_id
-.dart_tool/
-.flutter-plugins-dependencies
+**/build/
+**/ios/Flutter/
+**/ios/.symlinks/
+**/ios/Pods/
+**/ios/.generated/
+**/android/.gradle/
+**/android/app/build/
+**/android/build/
+**/android/.idea/
+**/android/local.properties
+**/pubspec.lock
+**/.dart_tool/
+**/.idea/
+**/.vscode/
+**/.packages
+**/coverage/
+**/test_cache/
+**/web/.dart_tool/
+**/web/build/
+
+# macOS
+**/macos/Flutter/
+**/macos/.symlinks/
+**/macos/build/
+**/macos/.generated/
+
+# Windows
+**/windows/Flutter/
+**/windows/.symlinks/
+**/windows/build/
+**/windows/.generated/
+
+# Linux
+**/linux/Flutter/
+**/linux/.symlinks/
+**/linux/build/
+**/linux/.generated/
+
+# Other
+**/.DS_Store
+**/Thumbs.db
+**/*.log
+
+# Firebase
+**/ios/Runner/GoogleService-Info.plist
+**/android/app/google-services.json
+
+
+# Supabase
+.env
+env/
+*.env
+
+# Generated files
+**/*.iml
+
+# Exclude personal files
+sandhai_admin.iml
+
+# Ignore IDE and editor folders
+.idea/
+.vscode/
+
+# Ignore test outputs
+unit_test_assets/
+
+# Ignore native assets
+native_assets/
+
+# Ignore ephemeral files
+**/ephemeral/
+
+# Ignore lock files
+package-lock.json
+
+# Ignore coverage reports
+coverage/
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore logs
+*.log
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore build outputs
+build/
+
+# Ignore pub cache
 .pub-cache/
-.pub/
-/build/
-/coverage/
 
-# Symbolication related
-app.*.symbols
+# Ignore flutter generated files
+.flutter-plugins
+.flutter-plugins-dependencies
 
-# Obfuscation related
-app.*.map.json
+# Ignore web build outputs
+web/build/
 
-# Android Studio will place build artifacts here
-/android/app/debug
-/android/app/profile
-/android/app/release
+# Ignore test cache
+.test_cache/
+
+# Ignore dart tool
+.dart_tool/
+
+# Ignore generated files
+*.g.dart
+
+# Ignore Freezed generated files
+*.freezed.dart
+
+# Ignore coverage reports
+coverage/
+
+# Ignore personal settings
+*.swp
+*.swo
+
+# Ignore lock files
+pubspec.lock
+
+# Ignore IDE files
+*.iml
+
+# Ignore local properties
+android/local.properties
+
+# Ignore firebase config
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+
+# Ignore supabase config
+.env
+
+# Ignore ephemeral files
+**/ephemeral/
+
+# Ignore test cache
+**/test_cache/
+
+# Ignore native assets
+**/native_assets/
+
+# Ignore build outputs
+**/build/
+
+# Ignore dart tool
+**/.dart_tool/
+
+# Ignore coverage reports
+**/coverage/
+
+# Ignore Freezed generated files
+**/*.freezed.dart
+
+# Ignore generated files
+**/*.g.dart
+
+# Ignore IDE files
+**/*.iml
+
+# Ignore personal settings
+**/*.swp
+**/*.swo
+
+# Ignore lock files
+**/pubspec.lock
+
+# Ignore system files
+**/.DS_Store
+**/Thumbs.db
+
+# Ignore logs
+**/*.log
+
+# Ignore temporary files
+**/*.tmp
+**/*.temp

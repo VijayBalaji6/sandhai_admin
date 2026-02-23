@@ -37,9 +37,7 @@ class ShopBloc extends Bloc<ShopEvent, ShopState> {
       ),
     );
 
-    final ApiResult<ShopModel> result = await _repository.fetchShop(
-      id: event.shopId,
-    );
+    final ApiResult<ShopModel> result = await _repository.fetchShop();
 
     result.when(
       success: (ShopModel shop) {

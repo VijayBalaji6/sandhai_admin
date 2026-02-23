@@ -23,37 +23,60 @@ class SupabaseApi {
   // SELECT
   // ---------------------------------------------------------------------------
 
-  Future<ApiResult<List<T>>> getAll<T>({
-    required FromJson<T> fromJson,
-    String columns = '*',
-    Map<String, dynamic>? filters,
-    String? orderBy,
-    bool ascending = true,
-    int? limit,
-    int? offset,
-  }) => ApiHandler.guard(
+
+
+Future<ApiResult<List<T>>> getAll<T>({
+  required FromJson<T> fromJson,
+  String columns = '*',
+  Map<String, dynamic>? filters,
+  String? orderBy,
+  bool ascending = true,
+  int? limit,
+  int? offset,
+}) {
+  final supabase = Supabase.instance.client;
+
+  return ApiHandler.guard(
     tag: '$_table.getAll',
-    timeout: timeout,
-    checkConnection: checkConnection,
     action: () async {
-      PostgrestFilterBuilder query = _query.select(columns);
-      query = _applyFilters(query, filters);
+      PostgrestFilterBuilder query =
+          supabase.from(_table).select(columns);
+
+      // Apply filters
+      if (filters != null) {
+        filters.forEach((key, value) {
+          query = query.eq(key, value);
+        });
+      }
 
       PostgrestTransformBuilder transform = query;
+
       if (orderBy != null) {
         transform = transform.order(orderBy, ascending: ascending);
       }
+
       if (limit != null) {
         transform = transform.limit(limit);
       }
+
       if (offset != null) {
-        transform = (transform).range(offset, offset + (limit ?? 20) - 1);
+        transform = transform.range(
+          offset,
+          offset + (limit ?? 20) - 1,
+        );
       }
 
-      final List<dynamic> data = await transform;
-      return data.cast<Map<String, dynamic>>().map(fromJson).toList();
+      /// 🔥 Supabase v2 returns List directly
+      final List<dynamic> data =
+          await transform as List<dynamic>;
+
+      return data
+          .cast<Map<String, dynamic>>()
+          .map(fromJson)
+          .toList();
     },
   );
+}
 
   Future<ApiResult<T>> getById<T>({
     required String id,
