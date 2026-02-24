@@ -1,13 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sandhai_admin/firebase_options.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract final class AppBootstrap {
   static Future<void> init() async {
     await _loadEnv();
-    // await _initFirebase();
-    await _initSupabase();
   }
 
   /// Loads .env from assets if present. If missing (e.g. 404 on web), env
@@ -21,6 +20,9 @@ abstract final class AppBootstrap {
         isOptional: true,
       );
 
+      await _initFirebase();
+      await _initSupabase();
+
       debugPrint('Loaded environment: $environment');
     } catch (e) {
       debugPrint('Env load failed, using dart-define fallback');
@@ -29,7 +31,9 @@ abstract final class AppBootstrap {
 
   static Future<void> _initFirebase() async {
     try {
-      await Firebase.initializeApp();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
     } catch (e, st) {
       // This allows the app to run even before Firebase is configured
       // (google-services.json / GoogleService-Info.plist / web options).

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sandhai_admin/common/widgets/custom_text/custom_text.dart';
 import 'package:sandhai_admin/config/theme/app_colors.dart';
 
 class SectionCard extends StatelessWidget {
@@ -11,13 +12,14 @@ class SectionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: AppColor.primaryDarkGreyColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          spacing: 12,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: Theme.of(context).textTheme.titleMedium),
-            const SizedBox(height: 12),
+            CustomText(text: title, fontSize: 20),
             child,
           ],
         ),

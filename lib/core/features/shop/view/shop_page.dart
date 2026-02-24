@@ -232,20 +232,29 @@ class _ShopPageState extends State<ShopPage> {
                       child: Column(
                         spacing: 12,
                         children: [
-                          CustomTextFormField(
-                            controller: _phoneController,
-                            labelText: 'Phone',
-                            keyboardType: TextInputType.phone,
-                            validator: (value) =>
-                                (value == null || value.trim().isEmpty)
-                                ? 'Phone is required'
-                                : null,
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomTextFormField(
+                                  controller: _phoneController,
+                                  labelText: 'Phone',
+                                  keyboardType: TextInputType.phone,
+                                  validator: (value) =>
+                                      (value == null || value.trim().isEmpty)
+                                      ? 'Phone is required'
+                                      : null,
+                                ),
+                              ),
+                              Expanded(
+                                child: CustomTextFormField(
+                                  controller: _emailController,
+                                  labelText: 'Email',
+                                  keyboardType: TextInputType.emailAddress,
+                                ),
+                              ),
+                            ],
                           ),
-                          CustomTextFormField(
-                            controller: _emailController,
-                            labelText: 'Email',
-                            keyboardType: TextInputType.emailAddress,
-                          ),
+
                           CustomTextFormField(
                             controller: _addressController,
                             labelText: 'Address',
