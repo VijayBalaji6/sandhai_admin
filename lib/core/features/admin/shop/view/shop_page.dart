@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sandhai_admin/common/widgets/custom_text/custom_text.dart';
 
-import '../../../../common/widgets/custom_app_bar/custom_app_bar.dart';
-import '../../../../common/widgets/custom_scaffold/custom_scaffold.dart';
-import '../../../../common/widgets/custom_text_field/custom_text_field.dart';
-import '../../../../common/widgets/custom_text_field/custom_text_form_field.dart';
-import '../../../../core/network/dtos/shop_model.dart';
+import '../../../../../common/widgets/custom_app_bar/custom_app_bar.dart';
+import '../../../../../common/widgets/custom_scaffold/custom_scaffold.dart';
+import '../../../../../common/widgets/custom_text_field/custom_text_field.dart';
+import '../../../../../common/widgets/custom_text_field/custom_text_form_field.dart';
+import '../../../../network/dtos/shop_model.dart';
 import '../bloc/shop_bloc.dart';
 import 'selection_card.dart';
 

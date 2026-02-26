@@ -24,7 +24,7 @@ class CustomScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar,
-      backgroundColor: backgroundColor ?? AppColor.primaryLightGreyColor,
+      backgroundColor: backgroundColor ?? AppColor.primaryColor,
       body: body,
       bottomNavigationBar: bottomBar,
       floatingActionButton: floatingActionButton,

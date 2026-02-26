@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sandhai_admin/common/widgets/custom_scaffold/custom_scaffold.dart';
+import 'package:sandhai_admin/config/theme/app_colors.dart';
 
 import '../../../../config/router/app_routes.dart';
 import '../../../../constants/app_strings.dart';
@@ -26,19 +28,15 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Scaffold(
+    return CustomScaffold(
+      backgroundColor: AppColor.primaryColor,
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.storefront_rounded,
-              size: 80,
-              color: theme.colorScheme.primary,
-            ),
+            Icon(Icons.storefront_rounded, size: 80),
             const SizedBox(height: 24),
-            Text(AppStrings.appName, style: theme.textTheme.headlineMedium),
+            Text(AppStrings.appName),
             const SizedBox(height: 32),
             const CircularProgressIndicator(),
           ],

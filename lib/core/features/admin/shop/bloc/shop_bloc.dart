@@ -2,9 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sandhai_admin/core/network/dtos/shop_model.dart';
 
-import '../../../network/core/api_exception.dart';
-import '../../../network/core/api_result.dart';
-import '../../../network/repository/shop_repository.dart';
+import '../../../../network/core/api_exception.dart';
+import '../../../../network/core/api_result.dart';
+import '../../../../network/repository/shop_repository.dart';
 
 part 'shop_event.dart';
 part 'shop_state.dart';

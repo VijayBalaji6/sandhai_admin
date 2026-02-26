@@ -1,12 +1,12 @@
 import 'package:go_router/go_router.dart';
 
 import '../../core/features/dashboard/view/dashboard_shell.dart';
-import '../../core/features/orders/view/current_orders_page.dart';
-import '../../core/features/orders/view/order_history_page.dart';
-import '../../core/features/products/view/products_page.dart';
-import '../../core/features/shop/view/shop_page.dart';
+import '../../core/features/admin/orders/view/current_orders_page.dart';
+import '../../core/features/admin/orders/view/order_history_page.dart';
+import '../../core/features/admin/products/view/products_page.dart';
+import '../../core/features/admin/shop/view/shop_page.dart';
 import '../../core/features/splash/view/splash_page.dart';
-import '../../core/features/users/view/users_page.dart';
+import '../../core/features/admin/users/view/users_page.dart';
 import 'app_routes.dart';
 
 abstract final class AppRouter {
