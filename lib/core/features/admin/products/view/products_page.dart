@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sandhai_admin/common/utils/toast_utils.dart';
 import 'package:sandhai_admin/common/widgets/custom_text/custom_text.dart';
-import 'package:sandhai_admin/config/theme/app_colors.dart';
 import 'package:sandhai_admin/core/features/admin/products/view/product_card.dart';
 import 'package:sandhai_admin/common/widgets/custom_app_bar/custom_app_bar.dart';
 import 'package:sandhai_admin/common/widgets/custom_scaffold/custom_scaffold.dart';
@@ -36,21 +36,11 @@ class _ProductsPageState extends State<ProductsPage> {
       child: BlocConsumer<ProductsBloc, ProductsState>(
         listener: (BuildContext context, ProductsState state) {
           if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage!),
-                backgroundColor: AppColor.errorColor,
-              ),
-            );
+            ToastUtils.showErrorToast(state.errorMessage!);
             _productsBloc.add(const ProductsMessageCleared());
           }
           if (state.successMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.successMessage!),
-                backgroundColor: AppColor.successColor,
-              ),
-            );
+            ToastUtils.showSuccessToast(state.successMessage!);
             _productsBloc.add(const ProductsMessageCleared());
           }
         },
@@ -62,20 +52,19 @@ class _ProductsPageState extends State<ProductsPage> {
               body: Center(child: CircularProgressIndicator()),
             );
           }
-
           if (state.status == ProductsStatus.failure &&
               state.products.isEmpty) {
             return CustomScaffold(
               appBar: const CustomAppBar(title: 'Products'),
               body: Center(
                 child: Column(
+                  spacing: 16,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomText(
                       text: state.errorMessage ?? 'Failed to load products',
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 16),
                     FilledButton.icon(
                       onPressed: () =>
                           _productsBloc.add(const ProductsFetchRequested()),

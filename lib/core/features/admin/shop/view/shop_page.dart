@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sandhai_admin/common/utils/toast_utils.dart';
 import 'package:sandhai_admin/common/widgets/custom_text/custom_text.dart';
 
 import '../../../../../common/widgets/custom_app_bar/custom_app_bar.dart';
@@ -149,16 +150,12 @@ class _ShopPageState extends State<ShopPage> {
           }
 
           if (state.errorMessage != null) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
+            ToastUtils.showErrorToast(state.errorMessage!);
             _shopBloc.add(const ShopMessageCleared());
           }
 
           if (state.successMessage != null) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.successMessage!)));
+            ToastUtils.showSuccessToast(state.successMessage!);
             _shopBloc.add(const ShopMessageCleared());
           }
         },
@@ -194,7 +191,7 @@ class _ShopPageState extends State<ShopPage> {
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(Icons.save_outlined),
-                  label: const Text('Save'),
+                  label: const CustomText(text: 'Save'),
                 ),
               ],
             ),
@@ -254,7 +251,6 @@ class _ShopPageState extends State<ShopPage> {
                               ),
                             ],
                           ),
-
                           CustomTextFormField(
                             controller: _addressController,
                             labelText: 'Address',
