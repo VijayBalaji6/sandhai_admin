@@ -1,4 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:sandhai_admin/core/features/admin/report/view/report_page.dart';
+import 'package:sandhai_admin/core/features/admin/settings/view/settings_page.dart';
 
 import '../../core/features/dashboard/view/dashboard_shell.dart';
 import '../../core/features/admin/orders/view/current_orders_page.dart';
@@ -58,6 +60,22 @@ abstract final class AppRouter {
               GoRoute(
                 path: AppRoutes.users,
                 builder: (context, state) => const UsersPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.settings,
+                builder: (context, state) => const SettingsPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.report,
+                builder: (context, state) => const ReportPage(),
               ),
             ],
           ),

@@ -5,4 +5,6 @@ abstract final class AppRoutes {
   static const orderHistory = '/order-history';
   static const shop = '/shop';
   static const users = '/users';
+  static const settings = '/settings';
+  static const report = '/report';
 }
