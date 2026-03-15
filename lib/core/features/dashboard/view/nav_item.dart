@@ -17,6 +17,6 @@ const List<NavItem> navItems = <NavItem>[
   NavItem(Icons.history_outlined, Icons.history, 'History'),
   NavItem(Icons.storefront_outlined, Icons.storefront, 'Shop'),
   NavItem(Icons.people_outline, Icons.people, 'Users'),
-  NavItem(Icons.people_outline, Icons.people, 'Settings'),
-  NavItem(Icons.people_outline, Icons.people, 'Reports'),
+  NavItem(Icons.settings_applications_outlined, Icons.settings, 'Settings'),
+  NavItem(Icons.report_outlined, Icons.report, 'Reports'),
 ];

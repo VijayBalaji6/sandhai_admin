@@ -23,7 +23,7 @@ class DashboardShell extends StatelessWidget {
       body: Row(
         children: [
           Container(
-            width: 106,
+            width: 75,
             decoration: BoxDecoration(
               color: colorScheme.surface,
               boxShadow: [
@@ -36,20 +36,20 @@ class DashboardShell extends StatelessWidget {
             ),
             child: SafeArea(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   const SizedBox(height: 12),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: CustomText(text: "Sandhai", fontSize: 20),
-                    ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: CustomText(text: "Sandhai", fontSize: 16),
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 50),
                   Expanded(
-                    child: ListView(
-                      padding: const EdgeInsets.only(top: 6, bottom: 6),
-                      children: List.generate(navItems.length, (i) {
+                    child: ListView.separated(
+                      itemCount: navItems.length,
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 12),
+                      itemBuilder: (BuildContext context, int i) {
                         final NavItem item = navItems[i];
                         final bool selected = i == navigationShell.currentIndex;
                         return NavTile(
@@ -58,7 +58,7 @@ class DashboardShell extends StatelessWidget {
                           colorScheme: colorScheme,
                           onTap: () => _onTap(i),
                         );
-                      }),
+                      },
                     ),
                   ),
                 ],
