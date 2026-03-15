@@ -10,7 +10,10 @@ _ProductModel _$ProductModelFromJson(Map<String, dynamic> json) =>
     _ProductModel(
       id: json['id'] as String,
       name: json['name'] as String,
-      category: json['category'] as String,
+      category: $enumDecode(
+        _$ProductCategoryEnumEnumMap,
+        json['product_category'],
+      ),
       imageUrl: json['image_url'] as String?,
       isActive: json['is_active'] as bool? ?? true,
       createdAt: json['created_at'] == null
@@ -28,13 +31,19 @@ Map<String, dynamic> _$ProductModelToJson(_ProductModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'category': instance.category,
+      'product_category': _$ProductCategoryEnumEnumMap[instance.category]!,
       'image_url': instance.imageUrl,
       'is_active': instance.isActive,
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
       'product_type': _$ProductTypeEnumEnumMap[instance.productType]!,
     };
+
+const _$ProductCategoryEnumEnumMap = {
+  ProductCategoryEnum.fruit: 'Fruit',
+  ProductCategoryEnum.vegetable: 'Vegetable',
+  ProductCategoryEnum.dairy: 'Dairy',
+};
 
 const _$ProductTypeEnumEnumMap = {
   ProductTypeEnum.simple: 'simple',

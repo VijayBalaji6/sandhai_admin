@@ -10,81 +10,153 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = Theme.of(context).colorScheme;
+    final bool hasImage = product.imageUrl != null && product.imageUrl!.isNotEmpty;
 
-    return Card(
+    return Container(
       margin: const EdgeInsets.only(bottom: 12),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        leading: product.imageUrl != null && product.imageUrl!.isNotEmpty
-            ? ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  product.imageUrl!,
-                  width: 56,
-                  height: 56,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => _placeholderIcon(scheme),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: scheme.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: scheme.outlineVariant.withValues(alpha: 0.45)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 14,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          hasImage ? _networkImage(scheme) : _placeholderIcon(scheme),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  product.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
                 ),
-              )
-            : _placeholderIcon(scheme),
-        title: Text(
-          product.name,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(
-          product.category,
-          style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 13),
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: product.productType == ProductTypeEnum.bundle
-                    ? AppColor.secondaryLightColor.withValues(alpha: 0.3)
-                    : scheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                product.productType.name,
-                style: TextStyle(fontSize: 12, color: scheme.onSurface),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                color: product.isActive
-                    ? AppColor.lightGreenColor.withValues(alpha: 0.3)
-                    : AppColor.greyColor.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Text(
-                product.isActive ? 'Active' : 'Inactive',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: product.isActive
-                      ? AppColor.successColor
-                      : scheme.onSurfaceVariant,
+                const SizedBox(height: 4),
+                Text(
+                  _categoryLabel(product.category),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 13),
                 ),
-              ),
+                const SizedBox(height: 10),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    _tag(
+                      label: _productTypeLabel(product.productType),
+                      background: _productTypeBackground(
+                        product.productType,
+                        scheme,
+                      ),
+                      color: scheme.onSurface,
+                    ),
+                    _tag(
+                      label: product.isActive ? 'Active' : 'Inactive',
+                      background: product.isActive
+                          ? AppColor.lightGreenColor.withValues(alpha: 0.3)
+                          : AppColor.greyColor.withValues(alpha: 0.26),
+                      color: product.isActive
+                          ? AppColor.successColor
+                          : scheme.onSurfaceVariant,
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _networkImage(ColorScheme scheme) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(14),
+      child: Image.network(
+        product.imageUrl!,
+        width: 74,
+        height: 74,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => _placeholderIcon(scheme),
+      ),
+    );
+  }
+
+  Widget _tag({
+    required String label,
+    required Color background,
+    required Color color,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: color,
         ),
       ),
     );
   }
 
+  String _productTypeLabel(ProductTypeEnum type) {
+    switch (type) {
+      case ProductTypeEnum.simple:
+        return 'Simple';
+      case ProductTypeEnum.bundle:
+        return 'Bundle';
+    }
+  }
+
+  Color _productTypeBackground(ProductTypeEnum type, ColorScheme scheme) {
+    switch (type) {
+      case ProductTypeEnum.simple:
+        return scheme.surfaceContainerHighest;
+      case ProductTypeEnum.bundle:
+        return AppColor.secondaryLightColor.withValues(alpha: 0.3);
+    }
+  }
+
   Widget _placeholderIcon(ColorScheme scheme) {
     return Container(
-      width: 56,
-      height: 56,
+      width: 74,
+      height: 74,
       decoration: BoxDecoration(
         color: scheme.surfaceContainerHighest,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(14),
       ),
       child: Icon(Icons.inventory_2_outlined, color: scheme.onSurfaceVariant),
     );
+  }
+
+  String _categoryLabel(ProductCategoryEnum category) {
+    switch (category) {
+      case ProductCategoryEnum.fruit:
+        return 'Fruit';
+      case ProductCategoryEnum.vegetable:
+        return 'Vegetable';
+      case ProductCategoryEnum.dairy:
+        return 'Dairy';
+    }
   }
 }

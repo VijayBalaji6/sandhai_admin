@@ -10,12 +10,21 @@ enum ProductTypeEnum {
   bundle,
 }
 
+enum ProductCategoryEnum {
+  @JsonValue('Fruit')
+  fruit,
+  @JsonValue('Vegetable')
+  vegetable,
+  @JsonValue('Dairy')
+  dairy,
+}
+
 @freezed
 abstract class ProductModel with _$ProductModel {
   const factory ProductModel({
     required String id,
     required String name,
-    required String category,
+    @JsonKey(name: 'product_category') required ProductCategoryEnum category,
     @JsonKey(name: 'image_url') String? imageUrl,
     @JsonKey(name: 'is_active') @Default(true) bool isActive,
     @JsonKey(name: 'created_at') DateTime? createdAt,

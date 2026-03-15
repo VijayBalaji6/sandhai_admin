@@ -15,7 +15,7 @@ class ProductsRemoteDataSource {
   }) async {
     final Map<String, dynamic> filters = <String, dynamic>{};
     if (category != null && category.isNotEmpty) {
-      filters['category'] = category;
+      filters['product_category'] = category;
     }
     if (isActive != null) {
       filters['is_active'] = isActive;
@@ -33,10 +33,7 @@ class ProductsRemoteDataSource {
   }
 
   Future<ApiResult<ProductModel>> fetchProductById(String id) {
-    return _api.getById<ProductModel>(
-      id: id,
-      fromJson: ProductModel.fromJson,
-    );
+    return _api.getById<ProductModel>(id: id, fromJson: ProductModel.fromJson);
   }
 
   Future<ApiResult<ProductModel>> createProduct(Map<String, dynamic> data) {
