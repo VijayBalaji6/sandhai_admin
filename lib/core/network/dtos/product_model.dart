@@ -6,8 +6,8 @@ part 'product_model.g.dart';
 enum ProductTypeEnum {
   @JsonValue('simple')
   simple,
-  @JsonValue('variable')
-  variable,
+  @JsonValue('bundle')
+  bundle,
 }
 
 @freezed
@@ -20,7 +20,9 @@ abstract class ProductModel with _$ProductModel {
     @JsonKey(name: 'is_active') @Default(true) bool isActive,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
-    @JsonKey(name: 'product_type') @Default(ProductTypeEnum.simple) ProductTypeEnum productType,
+    @JsonKey(name: 'product_type')
+    @Default(ProductTypeEnum.simple)
+    ProductTypeEnum productType,
   }) = _ProductModel;
 
   factory ProductModel.fromJson(Map<String, dynamic> json) =>

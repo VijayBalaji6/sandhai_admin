@@ -41,7 +41,7 @@ class ProductCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
               decoration: BoxDecoration(
-                color: product.productType == ProductTypeEnum.variable
+                color: product.productType == ProductTypeEnum.bundle
                     ? AppColor.secondaryLightColor.withValues(alpha: 0.3)
                     : scheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(12),

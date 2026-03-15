@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sandhai_admin/common/utils/toast_utils.dart';
+import 'package:sandhai_admin/common/widgets/custom_button/custom_elevated_button.dart';
 import 'package:sandhai_admin/common/widgets/custom_text/custom_text.dart';
+import 'package:sandhai_admin/config/theme/app_colors.dart';
 import 'package:sandhai_admin/core/features/admin/products/view/product_card.dart';
 import 'package:sandhai_admin/common/widgets/custom_app_bar/custom_app_bar.dart';
 import 'package:sandhai_admin/common/widgets/custom_scaffold/custom_scaffold.dart';
@@ -96,11 +98,22 @@ class _ProductsPageState extends State<ProductsPage> {
                 await Future<void>.delayed(const Duration(milliseconds: 500));
               },
               child: state.products.isEmpty
-                  ? const SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
-                      child: SizedBox(
-                        height: 200,
-                        child: Center(child: Text('No products yet')),
+                  ? Center(
+                      child: Column(
+                        spacing: 16,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomText(text: 'No products yet'),
+                          CustomElevatedButton(
+                            buttonName: 'Add Product',
+                            buttonBackgroundColor: AppColor.whiteColor,
+                            buttonFontColor: AppColor.primaryColor,
+                            buttonAction: () => _productsBloc.add(
+                              const ProductsFetchRequested(),
+                            ),
+                          ),
+                        ],
                       ),
                     )
                   : ListView.builder(

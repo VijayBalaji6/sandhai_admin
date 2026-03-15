@@ -38,5 +38,5 @@ Map<String, dynamic> _$ProductModelToJson(_ProductModel instance) =>
 
 const _$ProductTypeEnumEnumMap = {
   ProductTypeEnum.simple: 'simple',
-  ProductTypeEnum.variable: 'variable',
+  ProductTypeEnum.bundle: 'bundle',
 };

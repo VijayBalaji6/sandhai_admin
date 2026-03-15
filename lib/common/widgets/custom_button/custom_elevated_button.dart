@@ -1,6 +1,6 @@
-import 'package:QuIDPe/src/common/widgets/custom_text/custom_text.dart';
-import 'package:QuIDPe/src/config/design_system/color/app_color.dart';
+import 'package:sandhai_admin/config/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import '../custom_text/custom_text.dart';
 
 class CustomElevatedButton extends StatelessWidget {
   const CustomElevatedButton({

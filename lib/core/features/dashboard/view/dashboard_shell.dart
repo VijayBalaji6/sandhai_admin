@@ -48,7 +48,7 @@ class DashboardShell extends StatelessWidget {
                     child: ListView.separated(
                       itemCount: navItems.length,
                       separatorBuilder: (context, index) =>
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 24),
                       itemBuilder: (BuildContext context, int i) {
                         final NavItem item = navItems[i];
                         final bool selected = i == navigationShell.currentIndex;

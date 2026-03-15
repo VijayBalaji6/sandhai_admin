@@ -4,8 +4,7 @@ import '../dtos/product_model.dart';
 
 class ProductsRepository {
   ProductsRepository({ProductsRemoteDataSource? remoteDataSource})
-      : _remoteDataSource =
-            remoteDataSource ?? ProductsRemoteDataSource();
+    : _remoteDataSource = remoteDataSource ?? ProductsRemoteDataSource();
 
   final ProductsRemoteDataSource _remoteDataSource;
 
@@ -16,14 +15,24 @@ class ProductsRepository {
     bool ascending = true,
     int? limit,
     int? offset,
-  }) {
-    return _remoteDataSource.fetchProducts(
-      category: category,
-      isActive: isActive,
-      orderBy: orderBy,
-      ascending: ascending,
-      limit: limit,
-      offset: offset,
+  }) async {
+    final String? normalizedCategory = category?.trim();
+
+    final ApiResult<List<ProductModel>> result = await _remoteDataSource
+        .fetchProducts(
+          category: (normalizedCategory == null || normalizedCategory.isEmpty)
+              ? null
+              : normalizedCategory,
+          isActive: isActive,
+          orderBy: orderBy,
+          ascending: ascending,
+          limit: limit,
+          offset: offset,
+        );
+
+    return result.when(
+      success: (List<ProductModel> products) => ApiResult.success(products),
+      failure: (exception) => ApiResult.failure(exception),
     );
   }
 
