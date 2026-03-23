@@ -10,7 +10,8 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme scheme = Theme.of(context).colorScheme;
-    final bool hasImage = product.imageUrl != null && product.imageUrl!.isNotEmpty;
+    final bool hasImage =
+        product.imageUrl != null && product.imageUrl!.isNotEmpty;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -18,7 +19,9 @@ class ProductCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: scheme.surface,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: scheme.outlineVariant.withValues(alpha: 0.45)),
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(alpha: 0.45),
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.03),
@@ -50,7 +53,10 @@ class ProductCard extends StatelessWidget {
                   _categoryLabel(product.category),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(color: scheme.onSurfaceVariant, fontSize: 13),
+                  style: TextStyle(
+                    color: scheme.onSurfaceVariant,
+                    fontSize: 13,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Wrap(
@@ -92,7 +98,7 @@ class ProductCard extends StatelessWidget {
         width: 74,
         height: 74,
         fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => _placeholderIcon(scheme),
+        errorBuilder: (_, _, _) => _placeholderIcon(scheme),
       ),
     );
   }

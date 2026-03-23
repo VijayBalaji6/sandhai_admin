@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -737,7 +735,7 @@ class _ProductsPageState extends State<ProductsPage> {
       }
 
       final String fileName =
-          '${DateTime.now().millisecondsSinceEpoch}.${extension}';
+          '${DateTime.now().millisecondsSinceEpoch}.$extension';
       final String storagePath = 'products/$safeCategory/$fileName';
 
       final SupabaseClient client = Supabase.instance.client;
