@@ -26,6 +26,9 @@ class _CurrentOrdersPageState extends State<CurrentOrdersPage> {
   late final UsersRepository _usersRepository;
   Map<String, String> _userNamesByPhone = const {};
   Map<String, UserAddressModel> _addressesById = const {};
+  Map<String, _TabFilterState> _tabFilters = const {};
+  /// Bumped when filters reset so search field remounts with correct text.
+  Map<String, int> _filterPanelEpoch = const {};
 
   @override
   void initState() {
@@ -82,6 +85,11 @@ class _CurrentOrdersPageState extends State<CurrentOrdersPage> {
       ),
     );
     _loadUserNames();
+  }
+
+  void _updateUi(VoidCallback action) {
+    if (!mounted) return;
+    setState(action);
   }
 
 
@@ -152,35 +160,40 @@ class _CurrentOrdersPageState extends State<CurrentOrdersPage> {
                 child: TabBarView(
                   children: [
                     _buildOrderListTab(
+                      tabKey: 'ordered',
                       orders: _filterByStatus(state.orders, OrderStatusEnum.ordered),
                       state: state,
+                      scheme: scheme,
                       showActions: true,
                     ),
                     _buildOrderListTab(
-                      orders: _filterByStatus(
-                        state.orders,
-                        OrderStatusEnum.accepted,
-                      ),
+                      tabKey: 'accepted',
+                      orders: _filterByStatus(state.orders, OrderStatusEnum.accepted),
                       state: state,
+                      scheme: scheme,
                       showActions: true,
                     ),
                     _buildOrderListTab(
-                      orders: _filterByStatus(
-                        state.orders,
-                        OrderStatusEnum.packing,
-                      ),
+                      tabKey: 'packing',
+                      orders: _filterByStatus(state.orders, OrderStatusEnum.packing),
                       state: state,
+                      scheme: scheme,
                       showActions: true,
                     ),
                     _buildOrderListTab(
+                      tabKey: 'outfordelivery',
                       orders: _filterByStatus(
                         state.orders,
                         OrderStatusEnum.outForDelivery,
                       ),
                       state: state,
+                      scheme: scheme,
                       showActions: true,
                     ),
-                    _buildOtherStatusesTab(state, scheme),
+                    _buildOtherStatusesTab(
+                      state: state,
+                      scheme: scheme,
+                    ),
                   ],
                 ),
               ),
@@ -287,7 +300,199 @@ List<OrderModel> _filterByStatus(
 }
 
 extension on _CurrentOrdersPageState {
-  Widget _buildOtherStatusesTab(OrdersState state, ColorScheme scheme) {
+  _TabFilterState _tabFilter(String tabKey) {
+    return _tabFilters[tabKey] ?? const _TabFilterState();
+  }
+
+  List<OrderModel> _applyFilters(List<OrderModel> orders, String tabKey) {
+    final _TabFilterState filter = _tabFilter(tabKey);
+    final DateTime? from = filter.fromDate;
+    final DateTime? to = filter.toDate;
+    return orders.where((order) {
+      final String phone = order.userPhone.toLowerCase();
+      final String name =
+          (_userNamesByPhone[order.userPhone.trim()] ?? '').toLowerCase();
+      final bool matchesSearch =
+          filter.searchQuery.isEmpty ||
+          phone.contains(filter.searchQuery) ||
+          name.contains(filter.searchQuery);
+      if (!matchesSearch) return false;
+
+      if (from == null && to == null) return true;
+      final DateTime? createdAt = order.createdAt;
+      if (createdAt == null) return false;
+      final DateTime dateOnly = DateTime(
+        createdAt.year,
+        createdAt.month,
+        createdAt.day,
+      );
+      if (from != null) {
+        final DateTime fromOnly = DateTime(from.year, from.month, from.day);
+        if (dateOnly.isBefore(fromOnly)) return false;
+      }
+      if (to != null) {
+        final DateTime toOnly = DateTime(to.year, to.month, to.day);
+        if (dateOnly.isAfter(toOnly)) return false;
+      }
+      return true;
+    }).toList();
+  }
+
+  void _setTabFilter(
+    String tabKey, {
+    String? searchQuery,
+    DateTime? fromDate,
+    DateTime? toDate,
+    bool clear = false,
+    bool remountSearchField = false,
+  }) {
+    _updateUi(() {
+      void bumpEpoch() {
+        _filterPanelEpoch = Map<String, int>.from(_filterPanelEpoch)
+          ..[tabKey] = (_filterPanelEpoch[tabKey] ?? 0) + 1;
+      }
+
+      if (clear) {
+        bumpEpoch();
+        _tabFilters = Map<String, _TabFilterState>.from(_tabFilters)
+          ..remove(tabKey);
+        return;
+      }
+      if (remountSearchField) {
+        bumpEpoch();
+      }
+      final _TabFilterState current = _tabFilter(tabKey);
+      _tabFilters = Map<String, _TabFilterState>.from(_tabFilters)
+        ..[tabKey] = current.copyWith(
+          searchQuery: searchQuery,
+          fromDate: fromDate,
+          toDate: toDate,
+        );
+    });
+  }
+
+  Widget _buildFilterSection(String tabKey, ColorScheme scheme) {
+    final _TabFilterState filter = _tabFilter(tabKey);
+    final int panelEpoch = _filterPanelEpoch[tabKey] ?? 0;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerLow.withValues(alpha: 0.35),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(alpha: 0.55),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextFormField(
+            key: ValueKey('orders_filter_${tabKey}_$panelEpoch'),
+            initialValue: filter.searchQuery,
+            onChanged: (value) =>
+                _setTabFilter(tabKey, searchQuery: value.trim().toLowerCase()),
+            decoration: InputDecoration(
+              hintText: 'Search phone or name',
+              prefixIcon: Icon(Icons.search, size: 20, color: scheme.onSurfaceVariant),
+              suffixIcon: filter.searchQuery.isEmpty
+                  ? null
+                  : IconButton(
+                      tooltip: 'Clear search',
+                      onPressed: () => _setTabFilter(
+                        tabKey,
+                        searchQuery: '',
+                        remountSearchField: true,
+                      ),
+                      icon: const Icon(Icons.close),
+                    ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              filled: true,
+              fillColor: scheme.surface,
+              isDense: true,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 10,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () async {
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: filter.fromDate ?? DateTime.now(),
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime(2100),
+                    );
+                    if (picked != null) {
+                      _setTabFilter(tabKey, fromDate: picked);
+                    }
+                  },
+                  icon: const Icon(Icons.calendar_today_outlined, size: 18),
+                  label: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      filter.fromDate == null
+                          ? 'From'
+                          : DateTimeUtils.getFormattedDateTime(
+                              dateTimeData: filter.fromDate,
+                              dateTimeFormat: DateFormatUtils.ddMMyyyy,
+                            ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () async {
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: filter.toDate ?? DateTime.now(),
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime(2100),
+                    );
+                    if (picked != null) {
+                      _setTabFilter(tabKey, toDate: picked);
+                    }
+                  },
+                  icon: const Icon(Icons.event_outlined, size: 18),
+                  label: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      filter.toDate == null
+                          ? 'To'
+                          : DateTimeUtils.getFormattedDateTime(
+                              dateTimeData: filter.toDate,
+                              dateTimeFormat: DateFormatUtils.ddMMyyyy,
+                            ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              TextButton(
+                onPressed: () => _setTabFilter(tabKey, clear: true),
+                child: const Text('Clear'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOtherStatusesTab({
+    required OrdersState state,
+    required ColorScheme scheme,
+  }) {
     return DefaultTabController(
       length: 3,
       child: Column(
@@ -301,19 +506,25 @@ extension on _CurrentOrdersPageState {
             child: TabBarView(
               children: [
                 _buildOrderListTab(
+                  tabKey: 'delivered',
                   orders: _filterByStatus(state.orders, OrderStatusEnum.delivered),
                   state: state,
+                  scheme: scheme,
                 ),
                 _buildOrderListTab(
+                  tabKey: 'cancelled',
                   orders: _filterByStatus(state.orders, OrderStatusEnum.cancelled),
                   state: state,
+                  scheme: scheme,
                 ),
                 _buildOrderListTab(
+                  tabKey: 'undelivered',
                   orders: _filterByStatus(
                     state.orders,
                     OrderStatusEnum.undelivered,
                   ),
                   state: state,
+                  scheme: scheme,
                 ),
               ],
             ),
@@ -324,11 +535,15 @@ extension on _CurrentOrdersPageState {
   }
 
   Widget _buildOrderListTab({
+    required String tabKey,
     required List<OrderModel> orders,
     required OrdersState state,
+    required ColorScheme scheme,
     bool showActions = false,
   }) {
-    if (state.status == OrdersStatus.loading && orders.isEmpty) {
+    final List<OrderModel> filteredOrders = _applyFilters(orders, tabKey);
+
+    if (state.status == OrdersStatus.loading && filteredOrders.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -339,21 +554,22 @@ extension on _CurrentOrdersPageState {
         );
         await Future<void>.delayed(const Duration(milliseconds: 250));
       },
-      child: orders.isEmpty
-          ? ListView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              children: const [
-                SizedBox(height: 120),
-                Center(child: Text('No orders in this tab')),
-              ],
-            )
-          : ListView.separated(
+      child: ListView.separated(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 20),
-              itemCount: orders.length,
+              itemCount: filteredOrders.isEmpty ? 2 : filteredOrders.length + 1,
               separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
-                final order = orders[index];
+                if (index == 0) {
+                  return _buildFilterSection(tabKey, scheme);
+                }
+                if (filteredOrders.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 40),
+                    child: Center(child: Text('No orders in this tab')),
+                  );
+                }
+                final order = filteredOrders[index - 1];
                 final bool isUpdating = state.updatingOrderId == order.id;
                 final String? customerName =
                     _userNamesByPhone[order.userPhone.trim()];
@@ -763,6 +979,30 @@ class _CompactAction extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _TabFilterState {
+  const _TabFilterState({
+    this.searchQuery = '',
+    this.fromDate,
+    this.toDate,
+  });
+
+  final String searchQuery;
+  final DateTime? fromDate;
+  final DateTime? toDate;
+
+  _TabFilterState copyWith({
+    String? searchQuery,
+    DateTime? fromDate,
+    DateTime? toDate,
+  }) {
+    return _TabFilterState(
+      searchQuery: searchQuery ?? this.searchQuery,
+      fromDate: fromDate ?? this.fromDate,
+      toDate: toDate ?? this.toDate,
     );
   }
 }

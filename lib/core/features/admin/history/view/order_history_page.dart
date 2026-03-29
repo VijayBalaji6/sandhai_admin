@@ -26,6 +26,8 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
   late final UsersRepository _usersRepository;
   Map<String, String> _userNamesByPhone = const {};
   Map<String, UserAddressModel> _addressesById = const {};
+  Map<String, _TabFilterState> _tabFilters = const {};
+  Map<String, int> _filterPanelEpoch = const {};
 
   @override
   void initState() {
@@ -95,6 +97,11 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
     _loadUserNames();
   }
 
+  void _updateUi(VoidCallback action) {
+    if (!mounted) return;
+    setState(action);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider<OrdersBloc>.value(
@@ -158,9 +165,24 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
               Expanded(
                 child: TabBarView(
                   children: [
-                    _buildHistoryTab(state, OrderStatusEnum.delivered),
-                    _buildHistoryTab(state, OrderStatusEnum.cancelled),
-                    _buildHistoryTab(state, OrderStatusEnum.undelivered),
+                    _buildHistoryTab(
+                      state,
+                      scheme,
+                      OrderStatusEnum.delivered,
+                      'delivered',
+                    ),
+                    _buildHistoryTab(
+                      state,
+                      scheme,
+                      OrderStatusEnum.cancelled,
+                      'cancelled',
+                    ),
+                    _buildHistoryTab(
+                      state,
+                      scheme,
+                      OrderStatusEnum.undelivered,
+                      'undelivered',
+                    ),
                   ],
                 ),
               ),
@@ -178,31 +200,229 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
     );
   }
 
-  Widget _buildHistoryTab(OrdersState state, OrderStatusEnum status) {
-    final List<OrderModel> filtered = state.orders
+  _TabFilterState _tabFilter(String tabKey) {
+    return _tabFilters[tabKey] ?? const _TabFilterState();
+  }
+
+  List<OrderModel> _applyFilters(List<OrderModel> orders, String tabKey) {
+    final _TabFilterState filter = _tabFilter(tabKey);
+    final DateTime? from = filter.fromDate;
+    final DateTime? to = filter.toDate;
+    return orders.where((order) {
+      final String phone = order.userPhone.toLowerCase();
+      final String name =
+          (_userNamesByPhone[order.userPhone.trim()] ?? '').toLowerCase();
+      final bool matchesSearch =
+          filter.searchQuery.isEmpty ||
+          phone.contains(filter.searchQuery) ||
+          name.contains(filter.searchQuery);
+      if (!matchesSearch) return false;
+
+      if (from == null && to == null) return true;
+      final DateTime? createdAt = order.createdAt;
+      if (createdAt == null) return false;
+      final DateTime dateOnly = DateTime(
+        createdAt.year,
+        createdAt.month,
+        createdAt.day,
+      );
+      if (from != null) {
+        final DateTime fromOnly = DateTime(from.year, from.month, from.day);
+        if (dateOnly.isBefore(fromOnly)) return false;
+      }
+      if (to != null) {
+        final DateTime toOnly = DateTime(to.year, to.month, to.day);
+        if (dateOnly.isAfter(toOnly)) return false;
+      }
+      return true;
+    }).toList();
+  }
+
+  void _setTabFilter(
+    String tabKey, {
+    String? searchQuery,
+    DateTime? fromDate,
+    DateTime? toDate,
+    bool clear = false,
+    bool remountSearchField = false,
+  }) {
+    _updateUi(() {
+      void bumpEpoch() {
+        _filterPanelEpoch = Map<String, int>.from(_filterPanelEpoch)
+          ..[tabKey] = (_filterPanelEpoch[tabKey] ?? 0) + 1;
+      }
+
+      if (clear) {
+        bumpEpoch();
+        _tabFilters = Map<String, _TabFilterState>.from(_tabFilters)
+          ..remove(tabKey);
+        return;
+      }
+      if (remountSearchField) {
+        bumpEpoch();
+      }
+      final _TabFilterState current = _tabFilter(tabKey);
+      _tabFilters = Map<String, _TabFilterState>.from(_tabFilters)
+        ..[tabKey] = current.copyWith(
+          searchQuery: searchQuery,
+          fromDate: fromDate,
+          toDate: toDate,
+        );
+    });
+  }
+
+  Widget _buildFilterSection(String tabKey, ColorScheme scheme) {
+    final _TabFilterState filter = _tabFilter(tabKey);
+    final int panelEpoch = _filterPanelEpoch[tabKey] ?? 0;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+      decoration: BoxDecoration(
+        color: scheme.surfaceContainerLow.withValues(alpha: 0.35),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: scheme.outlineVariant.withValues(alpha: 0.55),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextFormField(
+            key: ValueKey('history_filter_${tabKey}_$panelEpoch'),
+            initialValue: filter.searchQuery,
+            onChanged: (value) =>
+                _setTabFilter(tabKey, searchQuery: value.trim().toLowerCase()),
+            decoration: InputDecoration(
+              hintText: 'Search phone or name',
+              prefixIcon: Icon(Icons.search, size: 20, color: scheme.onSurfaceVariant),
+              suffixIcon: filter.searchQuery.isEmpty
+                  ? null
+                  : IconButton(
+                      tooltip: 'Clear search',
+                      onPressed: () => _setTabFilter(
+                        tabKey,
+                        searchQuery: '',
+                        remountSearchField: true,
+                      ),
+                      icon: const Icon(Icons.close),
+                    ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              filled: true,
+              fillColor: scheme.surface,
+              isDense: true,
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 10,
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () async {
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: filter.fromDate ?? DateTime.now(),
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime(2100),
+                    );
+                    if (picked != null) {
+                      _setTabFilter(tabKey, fromDate: picked);
+                    }
+                  },
+                  icon: const Icon(Icons.calendar_today_outlined, size: 18),
+                  label: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      filter.fromDate == null
+                          ? 'From'
+                          : DateTimeUtils.getFormattedDateTime(
+                              dateTimeData: filter.fromDate,
+                              dateTimeFormat: DateFormatUtils.ddMMyyyy,
+                            ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () async {
+                    final DateTime? picked = await showDatePicker(
+                      context: context,
+                      initialDate: filter.toDate ?? DateTime.now(),
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime(2100),
+                    );
+                    if (picked != null) {
+                      _setTabFilter(tabKey, toDate: picked);
+                    }
+                  },
+                  icon: const Icon(Icons.event_outlined, size: 18),
+                  label: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      filter.toDate == null
+                          ? 'To'
+                          : DateTimeUtils.getFormattedDateTime(
+                              dateTimeData: filter.toDate,
+                              dateTimeFormat: DateFormatUtils.ddMMyyyy,
+                            ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 6),
+              TextButton(
+                onPressed: () => _setTabFilter(tabKey, clear: true),
+                child: const Text('Clear'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHistoryTab(
+    OrdersState state,
+    ColorScheme scheme,
+    OrderStatusEnum status,
+    String tabKey,
+  ) {
+    final List<OrderModel> statusOrders = state.orders
         .where((OrderModel o) => o.status == status)
         .toList();
+    final List<OrderModel> filtered = _applyFilters(statusOrders, tabKey);
 
     return RefreshIndicator(
       onRefresh: () async {
         _refresh();
         await Future<void>.delayed(const Duration(milliseconds: 250));
       },
-      child: filtered.isEmpty
-          ? ListView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              children: [
-                SizedBox(height: MediaQuery.sizeOf(context).height * 0.25),
-                Center(child: Text(_emptyMessage(status))),
-              ],
-            )
-          : ListView.separated(
+      child: ListView.separated(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 20),
-              itemCount: filtered.length,
+              itemCount: filtered.isEmpty ? 2 : filtered.length + 1,
               separatorBuilder: (_, __) => const SizedBox(height: 10),
               itemBuilder: (context, index) {
-                final order = filtered[index];
+                if (index == 0) {
+                  return _buildFilterSection(tabKey, scheme);
+                }
+                if (filtered.isEmpty) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      top: MediaQuery.sizeOf(context).height * 0.2,
+                    ),
+                    child: Center(child: Text(_emptyMessage(status))),
+                  );
+                }
+                final order = filtered[index - 1];
                 final String? customerName =
                     _userNamesByPhone[order.userPhone.trim()];
                 final UserAddressModel? address = order.addressId == null
@@ -514,6 +734,30 @@ class _StatusChip extends StatelessWidget {
           fontSize: 12,
         ),
       ),
+    );
+  }
+}
+
+class _TabFilterState {
+  const _TabFilterState({
+    this.searchQuery = '',
+    this.fromDate,
+    this.toDate,
+  });
+
+  final String searchQuery;
+  final DateTime? fromDate;
+  final DateTime? toDate;
+
+  _TabFilterState copyWith({
+    String? searchQuery,
+    DateTime? fromDate,
+    DateTime? toDate,
+  }) {
+    return _TabFilterState(
+      searchQuery: searchQuery ?? this.searchQuery,
+      fromDate: fromDate ?? this.fromDate,
+      toDate: toDate ?? this.toDate,
     );
   }
 }
