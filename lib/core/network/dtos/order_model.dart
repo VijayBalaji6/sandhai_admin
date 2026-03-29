@@ -6,16 +6,18 @@ part 'order_model.g.dart';
 enum OrderStatusEnum {
   @JsonValue('ordered')
   ordered,
-  @JsonValue('confirmed')
-  confirmed,
-  @JsonValue('packed')
-  packed,
-  @JsonValue('out_for_delivery')
+  @JsonValue('accepted')
+  accepted,
+  @JsonValue('packing')
+  packing,
+  @JsonValue('outfordelivery')
   outForDelivery,
   @JsonValue('delivered')
   delivered,
   @JsonValue('cancelled')
   cancelled,
+  @JsonValue('undelivered')
+  undelivered,
 }
 
 enum PaymentMethodEnum {
@@ -44,10 +46,6 @@ abstract class OrderModel with _$OrderModel {
     required String id,
     @JsonKey(name: 'user_phone') required String userPhone,
     @JsonKey(name: 'address_id') String? addressId,
-    @JsonKey(name: 'delivery_address') required String deliveryAddress,
-    @JsonKey(name: 'delivery_pincode') required String deliveryPincode,
-    @JsonKey(name: 'delivery_latitude') double? deliveryLatitude,
-    @JsonKey(name: 'delivery_longitude') double? deliveryLongitude,
     @Default(OrderStatusEnum.ordered) OrderStatusEnum status,
     @JsonKey(name: 'total_amount') required double totalAmount,
     @JsonKey(name: 'payment_method') required PaymentMethodEnum paymentMethod,
@@ -58,4 +56,36 @@ abstract class OrderModel with _$OrderModel {
 
   factory OrderModel.fromJson(Map<String, dynamic> json) =>
       _$OrderModelFromJson(json);
+}
+
+extension OrderStatusX on OrderStatusEnum {
+  bool get isCurrent =>
+      this == OrderStatusEnum.ordered ||
+      this == OrderStatusEnum.accepted ||
+      this == OrderStatusEnum.packing ||
+      this == OrderStatusEnum.outForDelivery ||
+      this == OrderStatusEnum.delivered;
+
+  bool get isCompleted =>
+      this == OrderStatusEnum.cancelled ||
+      this == OrderStatusEnum.undelivered;
+
+  String get label {
+    switch (this) {
+      case OrderStatusEnum.ordered:
+        return 'Ordered';
+      case OrderStatusEnum.accepted:
+        return 'Accepted';
+      case OrderStatusEnum.packing:
+        return 'Packing';
+      case OrderStatusEnum.outForDelivery:
+        return 'Out for delivery';
+      case OrderStatusEnum.delivered:
+        return 'Delivered';
+      case OrderStatusEnum.cancelled:
+        return 'Cancelled';
+      case OrderStatusEnum.undelivered:
+        return 'Undelivered';
+    }
+  }
 }

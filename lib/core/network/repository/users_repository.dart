@@ -1,5 +1,6 @@
 import '../core/api_result.dart';
 import '../data_source/users_remote_data_source.dart';
+import '../dtos/user_address_model.dart';
 import '../dtos/user_model.dart';
 
 class UsersRepository {
@@ -20,5 +21,15 @@ class UsersRepository {
       limit: limit,
       offset: offset,
     );
+  }
+
+  Future<ApiResult<List<UserAddressModel>>> fetchAddressesByUserPhone(
+    String userPhone,
+  ) {
+    return _remoteDataSource.fetchAddressesByUserPhone(userPhone);
+  }
+
+  Future<ApiResult<UserAddressModel>> fetchAddressById(String addressId) {
+    return _remoteDataSource.fetchAddressById(addressId);
   }
 }

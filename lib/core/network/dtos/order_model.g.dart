@@ -10,10 +10,6 @@ _OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => _OrderModel(
   id: json['id'] as String,
   userPhone: json['user_phone'] as String,
   addressId: json['address_id'] as String?,
-  deliveryAddress: json['delivery_address'] as String,
-  deliveryPincode: json['delivery_pincode'] as String,
-  deliveryLatitude: (json['delivery_latitude'] as num?)?.toDouble(),
-  deliveryLongitude: (json['delivery_longitude'] as num?)?.toDouble(),
   status:
       $enumDecodeNullable(_$OrderStatusEnumEnumMap, json['status']) ??
       OrderStatusEnum.ordered,
@@ -38,10 +34,6 @@ Map<String, dynamic> _$OrderModelToJson(_OrderModel instance) =>
       'id': instance.id,
       'user_phone': instance.userPhone,
       'address_id': instance.addressId,
-      'delivery_address': instance.deliveryAddress,
-      'delivery_pincode': instance.deliveryPincode,
-      'delivery_latitude': instance.deliveryLatitude,
-      'delivery_longitude': instance.deliveryLongitude,
       'status': _$OrderStatusEnumEnumMap[instance.status]!,
       'total_amount': instance.totalAmount,
       'payment_method': _$PaymentMethodEnumEnumMap[instance.paymentMethod]!,
@@ -52,11 +44,12 @@ Map<String, dynamic> _$OrderModelToJson(_OrderModel instance) =>
 
 const _$OrderStatusEnumEnumMap = {
   OrderStatusEnum.ordered: 'ordered',
-  OrderStatusEnum.confirmed: 'confirmed',
-  OrderStatusEnum.packed: 'packed',
-  OrderStatusEnum.outForDelivery: 'out_for_delivery',
+  OrderStatusEnum.accepted: 'accepted',
+  OrderStatusEnum.packing: 'packing',
+  OrderStatusEnum.outForDelivery: 'outfordelivery',
   OrderStatusEnum.delivered: 'delivered',
   OrderStatusEnum.cancelled: 'cancelled',
+  OrderStatusEnum.undelivered: 'undelivered',
 };
 
 const _$PaymentMethodEnumEnumMap = {
