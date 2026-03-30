@@ -532,6 +532,8 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                       0,
                       (sum, item) => sum + item.subtotal,
                     );
+                    final ScrollController itemsScrollController =
+                        ScrollController();
 
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -550,8 +552,10 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                         const SizedBox(height: 12),
                         Expanded(
                           child: Scrollbar(
+                            controller: itemsScrollController,
                             thumbVisibility: true,
                             child: ListView.separated(
+                              controller: itemsScrollController,
                               itemCount: items.length,
                               separatorBuilder: (_, __) => const Divider(height: 16),
                               itemBuilder: (context, index) {
