@@ -1,4 +1,4 @@
-name: Deploy Flutter Web to GitHub Pages
+name: Deploy Flutter Web (WASM)
 
 on:
   push:
@@ -9,15 +9,17 @@ permissions:
   contents: write
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4   # ✅ updated
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.22.0'   # use latest
 
       - name: Install dependencies
         run: flutter pub get
@@ -25,11 +27,12 @@ jobs:
       - name: Enable web
         run: flutter config --enable-web
 
-      - name: Build web
-        run: flutter build web --release
+      # 🔥 WASM BUILD
+      - name: Build Flutter Web (WASM)
+        run: flutter build web --wasm --release
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4   # ✅ updated
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: build/web
