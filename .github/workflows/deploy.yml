@@ -3,7 +3,7 @@ name: Deploy Flutter Web (WASM)
 on:
   push:
     branches:
-      - main
+      - deployment
 
 permissions:
   contents: read
@@ -16,6 +16,10 @@ env:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout code
@@ -38,14 +42,22 @@ jobs:
       - name: Enable web
         run: flutter config --enable-web
 
+      # 🔥 BUILD WITH ENV (IMPORTANT)
       - name: Build Flutter Web (WASM)
-        run: flutter build web --wasm --release
+        run: |
+          flutter build web --wasm --release \
+          --base-href=/${{ github.event.repository.name }}/ \
+          --dart-define=ENV=prod \
+          --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
+          --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
 
-      # 🔥 NEW DEPLOY STEPS (IMPORTANT)
+      # Upload build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
 
+      # Deploy
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4

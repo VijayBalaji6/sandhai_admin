@@ -12,13 +12,19 @@ abstract final class AppBootstrap {
   /// Loads .env from assets if present. If missing (e.g. 404 on web), env
   /// falls back to dart-defines: --dart-define=SUPABASE_URL=... --dart-define=SUPABASE_ANON_KEY=...
   static Future<void> _loadEnv() async {
-    const environment = String.fromEnvironment('ENV', defaultValue: 'qa');
+    const String environment = String.fromEnvironment(
+      'ENV',
+      defaultValue: 'qa',
+    );
+
+    final String fileName = switch (environment) {
+      'prod' => 'env/prod.env',
+      'dev' => 'env/dev.env',
+      _ => 'env/qa.env',
+    };
 
     try {
-      await dotenv.load(
-        fileName: environment == 'prod' ? 'env/prod.env' : 'env/qa.env',
-        isOptional: true,
-      );
+      await dotenv.load(fileName: fileName, isOptional: true);
 
       await _initFirebase();
       await _initSupabase();
