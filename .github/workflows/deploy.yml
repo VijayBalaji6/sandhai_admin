@@ -3,7 +3,7 @@ name: Deploy Flutter Web (WASM)
 on:
   push:
     branches:
-      - deployment
+      - main
 
 permissions:
   contents: read
