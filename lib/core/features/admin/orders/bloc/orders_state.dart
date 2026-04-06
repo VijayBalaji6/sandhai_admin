@@ -8,6 +8,7 @@ final class OrdersState extends Equatable {
     this.status = OrdersStatus.initial,
     this.orders = const [],
     this.filterMode = OrdersFilterMode.currentOnly,
+    this.shopId,
     this.updatingOrderId,
     this.errorMessage,
     this.successMessage,
@@ -16,6 +17,10 @@ final class OrdersState extends Equatable {
   final OrdersStatus status;
   final List<OrderModel> orders;
   final OrdersFilterMode filterMode;
+
+  /// Last fetch scope; used when refetching after status updates.
+  final String? shopId;
+
   final String? updatingOrderId;
   final String? errorMessage;
   final String? successMessage;
@@ -24,6 +29,8 @@ final class OrdersState extends Equatable {
     OrdersStatus? status,
     List<OrderModel>? orders,
     OrdersFilterMode? filterMode,
+    String? shopId,
+    bool clearShopId = false,
     String? updatingOrderId,
     String? errorMessage,
     String? successMessage,
@@ -35,6 +42,7 @@ final class OrdersState extends Equatable {
       status: status ?? this.status,
       orders: orders ?? this.orders,
       filterMode: filterMode ?? this.filterMode,
+      shopId: clearShopId ? null : (shopId ?? this.shopId),
       updatingOrderId: clearUpdatingOrder
           ? null
           : (updatingOrderId ?? this.updatingOrderId),
@@ -49,6 +57,7 @@ final class OrdersState extends Equatable {
         status,
         orders,
         filterMode,
+        shopId,
         updatingOrderId,
         errorMessage,
         successMessage,

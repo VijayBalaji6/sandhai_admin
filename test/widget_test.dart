@@ -12,10 +12,11 @@ import 'package:sandhai_admin/app.dart';
 void main() {
   testWidgets('App boots', (WidgetTester tester) async {
     await tester.pumpWidget(const SandhaiAdminApp());
-    await tester.pump(); // first frame
-    await tester.pump(const Duration(milliseconds: 300)); // let initial timers complete
-    await tester.pumpAndSettle();
+    await tester.pump();
 
     expect(find.text('Sandhai Admin'), findsOneWidget);
+
+    // Splash navigates after 2s; advance so no timer is left pending.
+    await tester.pump(const Duration(seconds: 3));
   });
 }

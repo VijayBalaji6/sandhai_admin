@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'api_exception.dart';
 import 'api_handler.dart';
 import 'api_result.dart';
 import 'supabase_client.dart';
@@ -34,6 +35,17 @@ Future<ApiResult<List<T>>> getAll<T>({
   int? limit,
   int? offset,
 }) {
+  if (!SupabaseClientProvider.isInitialized) {
+    return Future<ApiResult<List<T>>>.value(
+      const ApiResult.failure(
+        ApiException(
+          message: 'Supabase is not initialized.',
+          code: 'SUPABASE_NOT_INITIALIZED',
+        ),
+      ),
+    );
+  }
+
   final supabase = Supabase.instance.client;
 
   return ApiHandler.guard(

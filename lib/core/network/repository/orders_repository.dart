@@ -9,8 +9,12 @@ class OrdersRepository {
 
   final OrdersRemoteDataSource _remoteDataSource;
 
-  Future<ApiResult<List<OrderModel>>> fetchOrders() {
-    return _remoteDataSource.fetchOrders(orderBy: 'created_at', ascending: false);
+  Future<ApiResult<List<OrderModel>>> fetchOrders({String? shopId}) {
+    return _remoteDataSource.fetchOrders(
+      orderBy: 'created_at',
+      ascending: false,
+      shopId: shopId,
+    );
   }
 
   Future<ApiResult<OrderModel>> updateOrderStatus({

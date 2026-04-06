@@ -28,12 +28,15 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       state.copyWith(
         status: OrdersStatus.loading,
         filterMode: event.filterMode,
+        shopId: event.shopId,
         clearError: true,
         clearSuccess: true,
       ),
     );
 
-    final ApiResult<List<OrderModel>> result = await _repository.fetchOrders();
+    final ApiResult<List<OrderModel>> result = await _repository.fetchOrders(
+      shopId: event.shopId,
+    );
     result.when(
       success: (orders) {
         final List<OrderModel> filtered = _filterOrders(
@@ -45,6 +48,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
             status: OrdersStatus.loaded,
             orders: filtered,
             filterMode: event.filterMode,
+            shopId: event.shopId,
             clearError: true,
             clearSuccess: true,
           ),
@@ -56,6 +60,7 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
             status: OrdersStatus.failure,
             errorMessage: exception.message,
             filterMode: event.filterMode,
+            shopId: event.shopId,
             clearSuccess: true,
           ),
         );
@@ -100,7 +105,12 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
             clearError: true,
           ),
         );
-        add(OrdersFetchRequested(filterMode: state.filterMode));
+        add(
+          OrdersFetchRequested(
+            filterMode: state.filterMode,
+            shopId: state.shopId,
+          ),
+        );
       },
       failure: (ApiException exception) {
         emit(

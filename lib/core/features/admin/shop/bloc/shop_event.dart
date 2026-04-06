@@ -4,7 +4,7 @@ sealed class ShopEvent extends Equatable {
   const ShopEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 final class ShopFetchRequested extends ShopEvent {
@@ -13,7 +13,7 @@ final class ShopFetchRequested extends ShopEvent {
   final String? shopId;
 
   @override
-  List<Object> get props => [shopId!];
+  List<Object?> get props => [shopId];
 }
 
 final class ShopProfileUpdated extends ShopEvent {

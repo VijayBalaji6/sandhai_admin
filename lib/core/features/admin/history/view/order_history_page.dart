@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sandhai_admin/common/utils/date_time_utils.dart';
 import 'package:sandhai_admin/common/utils/toast_utils.dart';
 import 'package:sandhai_admin/core/features/admin/orders/bloc/orders_bloc.dart';
+import 'package:sandhai_admin/core/features/admin/shop_selection/cubit/admin_shop_selection_cubit.dart';
 import 'package:sandhai_admin/core/network/core/api_result.dart';
 import 'package:sandhai_admin/core/network/dtos/order_item_model.dart';
 import 'package:sandhai_admin/core/network/dtos/order_model.dart';
@@ -32,15 +33,26 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
   @override
   void initState() {
     super.initState();
-    _ordersBloc = OrdersBloc()
-      ..add(
-        const OrdersFetchRequested(
-          filterMode: OrdersFilterMode.completedOnly,
-        ),
-      );
+    _ordersBloc = OrdersBloc();
     _ordersRepository = OrdersRepository();
     _usersRepository = UsersRepository();
     _loadUserNames();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final AdminShopSelectionState sel =
+          context.read<AdminShopSelectionCubit>().state;
+      if (sel.status == AdminShopLoadStatus.loaded &&
+          sel.selectedShopId != null) {
+        _ordersBloc.add(
+          OrdersFetchRequested(
+            filterMode: OrdersFilterMode.completedOnly,
+            shopId: sel.selectedShopId,
+          ),
+        );
+      }
+    });
   }
 
   @override
@@ -89,9 +101,12 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
   }
 
   void _refresh() {
+    final String? shopId =
+        context.read<AdminShopSelectionCubit>().state.selectedShopId;
     _ordersBloc.add(
-      const OrdersFetchRequested(
+      OrdersFetchRequested(
         filterMode: OrdersFilterMode.completedOnly,
+        shopId: shopId,
       ),
     );
     _loadUserNames();
@@ -104,7 +119,29 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<OrdersBloc>.value(
+    return BlocListener<AdminShopSelectionCubit, AdminShopSelectionState>(
+      listenWhen: (AdminShopSelectionState previous,
+          AdminShopSelectionState current) {
+        if (current.status != AdminShopLoadStatus.loaded ||
+            current.selectedShopId == null) {
+          return false;
+        }
+        if (previous.status != AdminShopLoadStatus.loaded &&
+            current.status == AdminShopLoadStatus.loaded) {
+          return true;
+        }
+        return previous.selectedShopId != null &&
+            previous.selectedShopId != current.selectedShopId;
+      },
+      listener: (BuildContext context, AdminShopSelectionState sel) {
+        _ordersBloc.add(
+          OrdersFetchRequested(
+            filterMode: OrdersFilterMode.completedOnly,
+            shopId: sel.selectedShopId,
+          ),
+        );
+      },
+      child: BlocProvider<OrdersBloc>.value(
       value: _ordersBloc,
       child: BlocConsumer<OrdersBloc, OrdersState>(
         listener: (context, state) {
@@ -141,6 +178,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
           );
         },
       ),
+    ),
     );
   }
 
@@ -409,7 +447,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 20),
               itemCount: filtered.isEmpty ? 2 : filtered.length + 1,
-              separatorBuilder: (_, __) => const SizedBox(height: 10),
+              separatorBuilder: (_, _) => const SizedBox(height: 10),
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return _buildFilterSection(tabKey, scheme);
@@ -557,7 +595,7 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
                             child: ListView.separated(
                               controller: itemsScrollController,
                               itemCount: items.length,
-                              separatorBuilder: (_, __) => const Divider(height: 16),
+                              separatorBuilder: (_, _) => const Divider(height: 16),
                               itemBuilder: (context, index) {
                                 final item = items[index];
                                 return Row(

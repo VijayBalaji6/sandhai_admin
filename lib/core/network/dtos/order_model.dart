@@ -44,6 +44,7 @@ enum PaymentStatusEnum {
 abstract class OrderModel with _$OrderModel {
   const factory OrderModel({
     required String id,
+    @JsonKey(name: 'shop_id') String? shopId,
     @JsonKey(name: 'user_phone') required String userPhone,
     @JsonKey(name: 'address_id') String? addressId,
     @Default(OrderStatusEnum.ordered) OrderStatusEnum status,

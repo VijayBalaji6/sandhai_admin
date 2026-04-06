@@ -90,7 +90,7 @@ class _UsersPageState extends State<UsersPage> {
       physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(12),
       itemCount: state.users.length,
-      separatorBuilder: (_, __) => const SizedBox(height: 10),
+      separatorBuilder: (_, _) => const SizedBox(height: 10),
       itemBuilder: (BuildContext context, int index) {
         final UserModel user = state.users[index];
         final List<UserAddressModel> addresses =
@@ -156,7 +156,7 @@ class _UsersPageState extends State<UsersPage> {
                     thumbVisibility: true,
                     child: ListView.separated(
                       itemCount: addresses.length,
-                      separatorBuilder: (_, __) => const Divider(height: 12),
+                      separatorBuilder: (_, _) => const Divider(height: 12),
                       itemBuilder: (BuildContext context, int index) {
                         final UserAddressModel address = addresses[index];
                         return Row(

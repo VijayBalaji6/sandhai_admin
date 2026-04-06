@@ -8,6 +8,7 @@ part of 'order_model.dart';
 
 _OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => _OrderModel(
   id: json['id'] as String,
+  shopId: json['shop_id'] as String?,
   userPhone: json['user_phone'] as String,
   addressId: json['address_id'] as String?,
   status:
@@ -32,6 +33,7 @@ _OrderModel _$OrderModelFromJson(Map<String, dynamic> json) => _OrderModel(
 Map<String, dynamic> _$OrderModelToJson(_OrderModel instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'shop_id': instance.shopId,
       'user_phone': instance.userPhone,
       'address_id': instance.addressId,
       'status': _$OrderStatusEnumEnumMap[instance.status]!,

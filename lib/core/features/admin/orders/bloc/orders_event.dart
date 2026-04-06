@@ -10,12 +10,16 @@ sealed class OrdersEvent extends Equatable {
 final class OrdersFetchRequested extends OrdersEvent {
   const OrdersFetchRequested({
     this.filterMode = OrdersFilterMode.currentOnly,
+    this.shopId,
   });
 
   final OrdersFilterMode filterMode;
 
+  /// When set, only orders for this shop are loaded (matches `orders.shop_id`).
+  final String? shopId;
+
   @override
-  List<Object?> get props => [filterMode];
+  List<Object?> get props => [filterMode, shopId];
 }
 
 final class OrderStatusAdvanced extends OrdersEvent {

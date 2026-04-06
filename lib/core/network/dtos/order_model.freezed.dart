@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrderModel {
 
- String get id;@JsonKey(name: 'user_phone') String get userPhone;@JsonKey(name: 'address_id') String? get addressId; OrderStatusEnum get status;@JsonKey(name: 'total_amount') double get totalAmount;@JsonKey(name: 'payment_method') PaymentMethodEnum get paymentMethod;@JsonKey(name: 'payment_status') PaymentStatusEnum get paymentStatus;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt;
+ String get id;@JsonKey(name: 'shop_id') String? get shopId;@JsonKey(name: 'user_phone') String get userPhone;@JsonKey(name: 'address_id') String? get addressId; OrderStatusEnum get status;@JsonKey(name: 'total_amount') double get totalAmount;@JsonKey(name: 'payment_method') PaymentMethodEnum get paymentMethod;@JsonKey(name: 'payment_status') PaymentStatusEnum get paymentStatus;@JsonKey(name: 'created_at') DateTime? get createdAt;@JsonKey(name: 'updated_at') DateTime? get updatedAt;
 /// Create a copy of OrderModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $OrderModelCopyWith<OrderModel> get copyWith => _$OrderModelCopyWithImpl<OrderMo
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderModel&&(identical(other.id, id) || other.id == id)&&(identical(other.userPhone, userPhone) || other.userPhone == userPhone)&&(identical(other.addressId, addressId) || other.addressId == addressId)&&(identical(other.status, status) || other.status == status)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.paymentStatus, paymentStatus) || other.paymentStatus == paymentStatus)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderModel&&(identical(other.id, id) || other.id == id)&&(identical(other.shopId, shopId) || other.shopId == shopId)&&(identical(other.userPhone, userPhone) || other.userPhone == userPhone)&&(identical(other.addressId, addressId) || other.addressId == addressId)&&(identical(other.status, status) || other.status == status)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.paymentStatus, paymentStatus) || other.paymentStatus == paymentStatus)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userPhone,addressId,status,totalAmount,paymentMethod,paymentStatus,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,shopId,userPhone,addressId,status,totalAmount,paymentMethod,paymentStatus,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'OrderModel(id: $id, userPhone: $userPhone, addressId: $addressId, status: $status, totalAmount: $totalAmount, paymentMethod: $paymentMethod, paymentStatus: $paymentStatus, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'OrderModel(id: $id, shopId: $shopId, userPhone: $userPhone, addressId: $addressId, status: $status, totalAmount: $totalAmount, paymentMethod: $paymentMethod, paymentStatus: $paymentStatus, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $OrderModelCopyWith<$Res>  {
   factory $OrderModelCopyWith(OrderModel value, $Res Function(OrderModel) _then) = _$OrderModelCopyWithImpl;
 @useResult
 $Res call({
- String id,@JsonKey(name: 'user_phone') String userPhone,@JsonKey(name: 'address_id') String? addressId, OrderStatusEnum status,@JsonKey(name: 'total_amount') double totalAmount,@JsonKey(name: 'payment_method') PaymentMethodEnum paymentMethod,@JsonKey(name: 'payment_status') PaymentStatusEnum paymentStatus,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ String id,@JsonKey(name: 'shop_id') String? shopId,@JsonKey(name: 'user_phone') String userPhone,@JsonKey(name: 'address_id') String? addressId, OrderStatusEnum status,@JsonKey(name: 'total_amount') double totalAmount,@JsonKey(name: 'payment_method') PaymentMethodEnum paymentMethod,@JsonKey(name: 'payment_status') PaymentStatusEnum paymentStatus,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 
@@ -65,10 +65,11 @@ class _$OrderModelCopyWithImpl<$Res>
 
 /// Create a copy of OrderModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userPhone = null,Object? addressId = freezed,Object? status = null,Object? totalAmount = null,Object? paymentMethod = null,Object? paymentStatus = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? shopId = freezed,Object? userPhone = null,Object? addressId = freezed,Object? status = null,Object? totalAmount = null,Object? paymentMethod = null,Object? paymentStatus = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,userPhone: null == userPhone ? _self.userPhone : userPhone // ignore: cast_nullable_to_non_nullable
+as String,shopId: freezed == shopId ? _self.shopId : shopId // ignore: cast_nullable_to_non_nullable
+as String?,userPhone: null == userPhone ? _self.userPhone : userPhone // ignore: cast_nullable_to_non_nullable
 as String,addressId: freezed == addressId ? _self.addressId : addressId // ignore: cast_nullable_to_non_nullable
 as String?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as OrderStatusEnum,totalAmount: null == totalAmount ? _self.totalAmount : totalAmount // ignore: cast_nullable_to_non_nullable
@@ -161,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'user_phone')  String userPhone, @JsonKey(name: 'address_id')  String? addressId,  OrderStatusEnum status, @JsonKey(name: 'total_amount')  double totalAmount, @JsonKey(name: 'payment_method')  PaymentMethodEnum paymentMethod, @JsonKey(name: 'payment_status')  PaymentStatusEnum paymentStatus, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'shop_id')  String? shopId, @JsonKey(name: 'user_phone')  String userPhone, @JsonKey(name: 'address_id')  String? addressId,  OrderStatusEnum status, @JsonKey(name: 'total_amount')  double totalAmount, @JsonKey(name: 'payment_method')  PaymentMethodEnum paymentMethod, @JsonKey(name: 'payment_status')  PaymentStatusEnum paymentStatus, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderModel() when $default != null:
-return $default(_that.id,_that.userPhone,_that.addressId,_that.status,_that.totalAmount,_that.paymentMethod,_that.paymentStatus,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.shopId,_that.userPhone,_that.addressId,_that.status,_that.totalAmount,_that.paymentMethod,_that.paymentStatus,_that.createdAt,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -182,10 +183,10 @@ return $default(_that.id,_that.userPhone,_that.addressId,_that.status,_that.tota
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'user_phone')  String userPhone, @JsonKey(name: 'address_id')  String? addressId,  OrderStatusEnum status, @JsonKey(name: 'total_amount')  double totalAmount, @JsonKey(name: 'payment_method')  PaymentMethodEnum paymentMethod, @JsonKey(name: 'payment_status')  PaymentStatusEnum paymentStatus, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id, @JsonKey(name: 'shop_id')  String? shopId, @JsonKey(name: 'user_phone')  String userPhone, @JsonKey(name: 'address_id')  String? addressId,  OrderStatusEnum status, @JsonKey(name: 'total_amount')  double totalAmount, @JsonKey(name: 'payment_method')  PaymentMethodEnum paymentMethod, @JsonKey(name: 'payment_status')  PaymentStatusEnum paymentStatus, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _OrderModel():
-return $default(_that.id,_that.userPhone,_that.addressId,_that.status,_that.totalAmount,_that.paymentMethod,_that.paymentStatus,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.shopId,_that.userPhone,_that.addressId,_that.status,_that.totalAmount,_that.paymentMethod,_that.paymentStatus,_that.createdAt,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -202,10 +203,10 @@ return $default(_that.id,_that.userPhone,_that.addressId,_that.status,_that.tota
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'user_phone')  String userPhone, @JsonKey(name: 'address_id')  String? addressId,  OrderStatusEnum status, @JsonKey(name: 'total_amount')  double totalAmount, @JsonKey(name: 'payment_method')  PaymentMethodEnum paymentMethod, @JsonKey(name: 'payment_status')  PaymentStatusEnum paymentStatus, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id, @JsonKey(name: 'shop_id')  String? shopId, @JsonKey(name: 'user_phone')  String userPhone, @JsonKey(name: 'address_id')  String? addressId,  OrderStatusEnum status, @JsonKey(name: 'total_amount')  double totalAmount, @JsonKey(name: 'payment_method')  PaymentMethodEnum paymentMethod, @JsonKey(name: 'payment_status')  PaymentStatusEnum paymentStatus, @JsonKey(name: 'created_at')  DateTime? createdAt, @JsonKey(name: 'updated_at')  DateTime? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderModel() when $default != null:
-return $default(_that.id,_that.userPhone,_that.addressId,_that.status,_that.totalAmount,_that.paymentMethod,_that.paymentStatus,_that.createdAt,_that.updatedAt);case _:
+return $default(_that.id,_that.shopId,_that.userPhone,_that.addressId,_that.status,_that.totalAmount,_that.paymentMethod,_that.paymentStatus,_that.createdAt,_that.updatedAt);case _:
   return null;
 
 }
@@ -217,10 +218,11 @@ return $default(_that.id,_that.userPhone,_that.addressId,_that.status,_that.tota
 @JsonSerializable()
 
 class _OrderModel implements OrderModel {
-  const _OrderModel({required this.id, @JsonKey(name: 'user_phone') required this.userPhone, @JsonKey(name: 'address_id') this.addressId, this.status = OrderStatusEnum.ordered, @JsonKey(name: 'total_amount') required this.totalAmount, @JsonKey(name: 'payment_method') required this.paymentMethod, @JsonKey(name: 'payment_status') this.paymentStatus = PaymentStatusEnum.pending, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt});
+  const _OrderModel({required this.id, @JsonKey(name: 'shop_id') this.shopId, @JsonKey(name: 'user_phone') required this.userPhone, @JsonKey(name: 'address_id') this.addressId, this.status = OrderStatusEnum.ordered, @JsonKey(name: 'total_amount') required this.totalAmount, @JsonKey(name: 'payment_method') required this.paymentMethod, @JsonKey(name: 'payment_status') this.paymentStatus = PaymentStatusEnum.pending, @JsonKey(name: 'created_at') this.createdAt, @JsonKey(name: 'updated_at') this.updatedAt});
   factory _OrderModel.fromJson(Map<String, dynamic> json) => _$OrderModelFromJson(json);
 
 @override final  String id;
+@override@JsonKey(name: 'shop_id') final  String? shopId;
 @override@JsonKey(name: 'user_phone') final  String userPhone;
 @override@JsonKey(name: 'address_id') final  String? addressId;
 @override@JsonKey() final  OrderStatusEnum status;
@@ -243,16 +245,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderModel&&(identical(other.id, id) || other.id == id)&&(identical(other.userPhone, userPhone) || other.userPhone == userPhone)&&(identical(other.addressId, addressId) || other.addressId == addressId)&&(identical(other.status, status) || other.status == status)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.paymentStatus, paymentStatus) || other.paymentStatus == paymentStatus)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderModel&&(identical(other.id, id) || other.id == id)&&(identical(other.shopId, shopId) || other.shopId == shopId)&&(identical(other.userPhone, userPhone) || other.userPhone == userPhone)&&(identical(other.addressId, addressId) || other.addressId == addressId)&&(identical(other.status, status) || other.status == status)&&(identical(other.totalAmount, totalAmount) || other.totalAmount == totalAmount)&&(identical(other.paymentMethod, paymentMethod) || other.paymentMethod == paymentMethod)&&(identical(other.paymentStatus, paymentStatus) || other.paymentStatus == paymentStatus)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,userPhone,addressId,status,totalAmount,paymentMethod,paymentStatus,createdAt,updatedAt);
+int get hashCode => Object.hash(runtimeType,id,shopId,userPhone,addressId,status,totalAmount,paymentMethod,paymentStatus,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'OrderModel(id: $id, userPhone: $userPhone, addressId: $addressId, status: $status, totalAmount: $totalAmount, paymentMethod: $paymentMethod, paymentStatus: $paymentStatus, createdAt: $createdAt, updatedAt: $updatedAt)';
+  return 'OrderModel(id: $id, shopId: $shopId, userPhone: $userPhone, addressId: $addressId, status: $status, totalAmount: $totalAmount, paymentMethod: $paymentMethod, paymentStatus: $paymentStatus, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -263,7 +265,7 @@ abstract mixin class _$OrderModelCopyWith<$Res> implements $OrderModelCopyWith<$
   factory _$OrderModelCopyWith(_OrderModel value, $Res Function(_OrderModel) _then) = __$OrderModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id,@JsonKey(name: 'user_phone') String userPhone,@JsonKey(name: 'address_id') String? addressId, OrderStatusEnum status,@JsonKey(name: 'total_amount') double totalAmount,@JsonKey(name: 'payment_method') PaymentMethodEnum paymentMethod,@JsonKey(name: 'payment_status') PaymentStatusEnum paymentStatus,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
+ String id,@JsonKey(name: 'shop_id') String? shopId,@JsonKey(name: 'user_phone') String userPhone,@JsonKey(name: 'address_id') String? addressId, OrderStatusEnum status,@JsonKey(name: 'total_amount') double totalAmount,@JsonKey(name: 'payment_method') PaymentMethodEnum paymentMethod,@JsonKey(name: 'payment_status') PaymentStatusEnum paymentStatus,@JsonKey(name: 'created_at') DateTime? createdAt,@JsonKey(name: 'updated_at') DateTime? updatedAt
 });
 
 
@@ -280,10 +282,11 @@ class __$OrderModelCopyWithImpl<$Res>
 
 /// Create a copy of OrderModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userPhone = null,Object? addressId = freezed,Object? status = null,Object? totalAmount = null,Object? paymentMethod = null,Object? paymentStatus = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? shopId = freezed,Object? userPhone = null,Object? addressId = freezed,Object? status = null,Object? totalAmount = null,Object? paymentMethod = null,Object? paymentStatus = null,Object? createdAt = freezed,Object? updatedAt = freezed,}) {
   return _then(_OrderModel(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,userPhone: null == userPhone ? _self.userPhone : userPhone // ignore: cast_nullable_to_non_nullable
+as String,shopId: freezed == shopId ? _self.shopId : shopId // ignore: cast_nullable_to_non_nullable
+as String?,userPhone: null == userPhone ? _self.userPhone : userPhone // ignore: cast_nullable_to_non_nullable
 as String,addressId: freezed == addressId ? _self.addressId : addressId // ignore: cast_nullable_to_non_nullable
 as String?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
 as OrderStatusEnum,totalAmount: null == totalAmount ? _self.totalAmount : totalAmount // ignore: cast_nullable_to_non_nullable

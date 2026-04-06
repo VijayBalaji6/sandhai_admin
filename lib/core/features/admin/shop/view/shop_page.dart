@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sandhai_admin/common/utils/toast_utils.dart';
 import 'package:sandhai_admin/common/widgets/custom_text/custom_text.dart';
+import 'package:sandhai_admin/core/features/admin/shop_selection/cubit/admin_shop_selection_cubit.dart';
 
 import '../../../../../common/widgets/custom_app_bar/custom_app_bar.dart';
 import '../../../../../common/widgets/custom_scaffold/custom_scaffold.dart';
@@ -36,7 +37,18 @@ class _ShopPageState extends State<ShopPage> {
   @override
   void initState() {
     super.initState();
-    _shopBloc = ShopBloc()..add(const ShopFetchRequested());
+    _shopBloc = ShopBloc();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) {
+        return;
+      }
+      final AdminShopSelectionState sel =
+          context.read<AdminShopSelectionCubit>().state;
+      if (sel.status == AdminShopLoadStatus.loaded &&
+          sel.selectedShopId != null) {
+        _shopBloc.add(ShopFetchRequested(shopId: sel.selectedShopId));
+      }
+    });
   }
 
   @override
@@ -139,7 +151,24 @@ class _ShopPageState extends State<ShopPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ShopBloc>.value(
+    return BlocListener<AdminShopSelectionCubit, AdminShopSelectionState>(
+      listenWhen: (AdminShopSelectionState previous,
+          AdminShopSelectionState current) {
+        if (current.status != AdminShopLoadStatus.loaded ||
+            current.selectedShopId == null) {
+          return false;
+        }
+        if (previous.status != AdminShopLoadStatus.loaded &&
+            current.status == AdminShopLoadStatus.loaded) {
+          return true;
+        }
+        return previous.selectedShopId != null &&
+            previous.selectedShopId != current.selectedShopId;
+      },
+      listener: (BuildContext context, AdminShopSelectionState sel) {
+        _shopBloc.add(ShopFetchRequested(shopId: sel.selectedShopId));
+      },
+      child: BlocProvider<ShopBloc>.value(
       value: _shopBloc,
       child: BlocConsumer<ShopBloc, ShopState>(
         listener: (BuildContext context, ShopState state) {
@@ -171,7 +200,13 @@ class _ShopPageState extends State<ShopPage> {
               appBar: const CustomAppBar(title: 'Shop Dashboard'),
               body: Center(
                 child: ElevatedButton(
-                  onPressed: () => _shopBloc.add(const ShopFetchRequested()),
+                  onPressed: () {
+                    final String? id = context
+                        .read<AdminShopSelectionCubit>()
+                        .state
+                        .selectedShopId;
+                    _shopBloc.add(ShopFetchRequested(shopId: id));
+                  },
                   child: const Text('Retry'),
                 ),
               ),
@@ -384,6 +419,7 @@ class _ShopPageState extends State<ShopPage> {
           );
         },
       ),
+    ),
     );
   }
 }

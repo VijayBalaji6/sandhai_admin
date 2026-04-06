@@ -12,10 +12,16 @@ class OrdersRemoteDataSource {
     bool ascending = false,
     int? limit,
     int? offset,
+    String? shopId,
   }) {
+    final Map<String, dynamic>? filters = shopId != null && shopId.trim().isNotEmpty
+        ? <String, dynamic>{'shop_id': shopId.trim()}
+        : null;
+
     return _api.getAll<OrderModel>(
       fromJson: OrderModel.fromJson,
       columns: '*',
+      filters: filters,
       orderBy: orderBy ?? 'created_at',
       ascending: ascending,
       limit: limit,
