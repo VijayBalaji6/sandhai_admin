@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sandhai_admin/common/widgets/custom_scaffold/custom_scaffold.dart';
 import 'package:sandhai_admin/config/theme/app_colors.dart';
+import 'package:sandhai_admin/core/network/auth/admin_auth_session.dart';
 
 import '../../../../config/router/app_routes.dart';
 import '../../../../constants/app_strings.dart';
@@ -23,7 +24,11 @@ class _SplashPageState extends State<SplashPage> {
   Future<void> _navigateToDashboard() async {
     await Future.delayed(const Duration(seconds: 2));
     if (!mounted) return;
-    context.go(AppRoutes.products);
+    if (AdminAuthSession.isSignedIn) {
+      context.go(AppRoutes.products);
+    } else {
+      context.go(AppRoutes.login);
+    }
   }
 
   @override

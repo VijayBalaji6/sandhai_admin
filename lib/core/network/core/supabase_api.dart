@@ -1,6 +1,5 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import 'api_exception.dart';
 import 'api_handler.dart';
 import 'api_result.dart';
 import 'supabase_client.dart';
@@ -26,33 +25,21 @@ class SupabaseApi {
 
 
 
-Future<ApiResult<List<T>>> getAll<T>({
-  required FromJson<T> fromJson,
-  String columns = '*',
-  Map<String, dynamic>? filters,
-  String? orderBy,
-  bool ascending = true,
-  int? limit,
-  int? offset,
-}) {
-  if (!SupabaseClientProvider.isInitialized) {
-    return Future<ApiResult<List<T>>>.value(
-      const ApiResult.failure(
-        ApiException(
-          message: 'Supabase is not initialized.',
-          code: 'SUPABASE_NOT_INITIALIZED',
-        ),
-      ),
-    );
-  }
-
-  final supabase = Supabase.instance.client;
-
-  return ApiHandler.guard(
-    tag: '$_table.getAll',
-    action: () async {
-      PostgrestFilterBuilder query =
-          supabase.from(_table).select(columns);
+  Future<ApiResult<List<T>>> getAll<T>({
+    required FromJson<T> fromJson,
+    String columns = '*',
+    Map<String, dynamic>? filters,
+    String? orderBy,
+    bool ascending = true,
+    int? limit,
+    int? offset,
+  }) {
+    return ApiHandler.guard(
+      tag: '$_table.getAll',
+      action: () async {
+        final SupabaseClient supabase = Supabase.instance.client;
+        PostgrestFilterBuilder query =
+            supabase.from(_table).select(columns);
 
       // Apply filters
       if (filters != null) {

@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:sandhai_admin/config/env/app_env.dart';
 import 'package:sandhai_admin/firebase_options.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -9,29 +10,39 @@ abstract final class AppBootstrap {
     await _loadEnv();
   }
 
-  /// Loads .env from assets if present. If missing (e.g. 404 on web), env
-  /// falls back to dart-defines: --dart-define=SUPABASE_URL=... --dart-define=SUPABASE_ANON_KEY=...
+  /// Loads `.env` files from assets (merged). Order: shared [qa] base, then
+  /// flavor file [ENV]. So `ENV=dev` still picks up `env/qa.env` when `dev.env`
+  /// is missing. Final values also come from `--dart-define` via [AppEnv].
   static Future<void> _loadEnv() async {
     const String environment = String.fromEnvironment(
       'ENV',
       defaultValue: 'qa',
     );
 
-    final String fileName = switch (environment) {
-      'prod' => 'env/prod.env',
-      'dev' => 'env/dev.env',
-      _ => 'env/qa.env',
-    };
-
     try {
-      await dotenv.load(fileName: fileName, isOptional: true);
+      // Merge: later loads override earlier keys (flutter_dotenv merges).
+      await dotenv.load(fileName: 'env/qa.env', isOptional: true);
+      await dotenv.load(fileName: 'env/dev.env', isOptional: true);
+      await dotenv.load(fileName: 'env/prod.env', isOptional: true);
+      await dotenv.load(fileName: 'env/$environment.env', isOptional: true);
 
       await _initFirebase();
       await _initSupabase();
 
-      debugPrint('Loaded environment: $environment');
-    } catch (e) {
-      debugPrint('Env load failed, using dart-define fallback');
+      final bool hasSupabase = AppEnv.supabaseUrl.trim().isNotEmpty &&
+          AppEnv.supabaseAnonKey.trim().isNotEmpty;
+      debugPrint(
+        'SandhaiAdmin: ENV=$environment, supabaseConfigured=$hasSupabase',
+      );
+      if (!hasSupabase) {
+        debugPrint(
+          'SandhaiAdmin: Missing SUPABASE_URL / SUPABASE_ANON_KEY. '
+          'Copy env/qa.env.example to env/qa.env (or set --dart-define).',
+        );
+      }
+    } catch (e, st) {
+      debugPrint('Env load failed: $e');
+      debugPrintStack(stackTrace: st);
     }
   }
 
@@ -49,15 +60,13 @@ abstract final class AppBootstrap {
   }
 
   static Future<void> _initSupabase() async {
-    final String supabaseUrl =
-        dotenv.env['SUPABASE_URL'] ??
-        const String.fromEnvironment('SUPABASE_URL');
+    // Same values as [AppEnv] after dotenv load (single source of truth).
+    final String supabaseUrl = AppEnv.supabaseUrl.trim();
+    final String supabaseAnonKey = AppEnv.supabaseAnonKey.trim();
 
-    final String supabaseAnonKey =
-        dotenv.env['SUPABASE_ANON_KEY'] ??
-        const String.fromEnvironment('SUPABASE_ANON_KEY');
-
-    if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) return;
+    if (supabaseUrl.isEmpty || supabaseAnonKey.isEmpty) {
+      return;
+    }
 
     try {
       await Supabase.initialize(url: supabaseUrl, anonKey: supabaseAnonKey);

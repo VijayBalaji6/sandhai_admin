@@ -1,5 +1,7 @@
 abstract final class AppRoutes {
   static const splash = '/';
+  static const login = '/login';
+  static const otp = '/otp';
   static const products = '/products';
   static const currentOrders = '/current-orders';
   static const orderHistory = '/order-history';

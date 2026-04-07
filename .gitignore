@@ -48,10 +48,11 @@
 **/android/app/google-services.json
 
 
-# Supabase
+# Supabase / env files (commit env/*.example templates; keep env/qa.env local)
 .env
-env/
 *.env
+env/*.env
+!env/*.example
 
 # Generated files
 **/*.iml

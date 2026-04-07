@@ -17,7 +17,7 @@ abstract final class ApiHandler {
     bool checkConnection = true,
   }) async {
     try {
-      SupabaseClientProvider.ensureInitialized();
+      await SupabaseClientProvider.ensureReadyForApi();
       if (checkConnection) {
         final hasInternet = await NetworkUtils.hasInternetConnection();
         if (!hasInternet) {

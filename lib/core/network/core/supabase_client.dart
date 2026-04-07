@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../../../config/env/app_env.dart';
 
 abstract final class SupabaseClientProvider {
@@ -14,8 +16,8 @@ abstract final class SupabaseClientProvider {
   /// Returns true if Supabase is initialized and ready.
   static bool get isInitialized {
     try {
-      final url = AppEnv.supabaseUrl.trim();
-      final key = AppEnv.supabaseAnonKey.trim();
+      final String url = AppEnv.supabaseUrl.trim();
+      final String key = AppEnv.supabaseAnonKey.trim();
       if (url.isEmpty || key.isEmpty) {
         return false;
       }
@@ -26,23 +28,56 @@ abstract final class SupabaseClientProvider {
     }
   }
 
-  /// Throws if Supabase is not initialized. Call at the start of any API call.
+  /// Loads env in [AppBootstrap.init], then call this so [AppEnv] and Supabase
+  /// use the same URL/key. Safe to call multiple times.
+  ///
+  /// If URL/key are missing, returns without throwing (client stays uninitialized).
+  static Future<void> ensureReady() async {
+    if (isInitialized) {
+      return;
+    }
+    final String url = AppEnv.supabaseUrl.trim();
+    final String key = AppEnv.supabaseAnonKey.trim();
+    if (url.isEmpty || key.isEmpty) {
+      return;
+    }
+    try {
+      await Supabase.initialize(url: url, anonKey: key);
+    } catch (e, st) {
+      if (isInitialized) {
+        return;
+      }
+      debugPrint('Supabase.initialize failed: $e');
+      debugPrintStack(stackTrace: st);
+      rethrow;
+    }
+  }
+
+  /// Use before network calls: ensures lazy init, then validates configuration.
+  static Future<void> ensureReadyForApi() async {
+    await ensureReady();
+    if (!isInitialized) {
+      throw StateError(
+        'Supabase is not configured. Add SUPABASE_URL and SUPABASE_ANON_KEY '
+        'to env/qa.env (or prod.env) or pass '
+        '--dart-define=SUPABASE_URL=... and --dart-define=SUPABASE_ANON_KEY=...',
+      );
+    }
+  }
+
+  /// Throws if Supabase is not initialized (sync check only).
   static void ensureInitialized() {
     if (!isInitialized) {
-      final url = AppEnv.supabaseUrl;
-      final key = AppEnv.supabaseAnonKey;
       throw StateError(
-        'Supabase is not initialized.\n'
-        'Call AppBootstrap.init() before API calls.\n'
-        'Current config: SUPABASE_URL="$url", SUPABASE_ANON_KEY="${key.isNotEmpty ? "***" : ""}"',
+        'Supabase is not initialized. Configure credentials or call ensureReady().',
       );
     }
   }
 
   /// (Optional) Re-initialize Supabase client (for hot reload/dev scenarios).
   static Future<void> reinitialize() async {
-    final url = AppEnv.supabaseUrl.trim();
-    final key = AppEnv.supabaseAnonKey.trim();
+    final String url = AppEnv.supabaseUrl.trim();
+    final String key = AppEnv.supabaseAnonKey.trim();
     if (url.isEmpty || key.isEmpty) {
       throw StateError(
         'Cannot reinitialize Supabase: URL or anon key is empty.',
