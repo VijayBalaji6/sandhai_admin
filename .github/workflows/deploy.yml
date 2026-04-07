@@ -1,9 +1,25 @@
+# Deploy Flutter Web to GitHub Pages.
+#
+# How config reaches the app (no env/*.env file in CI):
+#   • Repository secrets are passed as --dart-define at *compile* time.
+#   • AppEnv reads them via String.fromEnvironment (baked into the web bundle).
+#   • Redeploy after changing secrets — values are fixed until the next build.
+#
+# Required repo setup:
+#   • Settings → Secrets and variables → Actions: SUPABASE_URL, SUPABASE_ANON_KEY
+#   • Settings → Pages → Build: GitHub Actions (not “branch”)
+#   • Open the site at https://<owner>.github.io/<repo>/ (project Pages URL)
+
 name: Deploy Flutter Web (WASM)
 
 on:
   push:
     branches:
       - main
+
+concurrency:
+  group: pages-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -29,6 +45,7 @@ jobs:
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
 
       - name: Verify Flutter
         run: flutter --version
@@ -42,22 +59,27 @@ jobs:
       - name: Enable web
         run: flutter config --enable-web
 
-      # 🔥 BUILD WITH ENV (IMPORTANT)
+      # Fail fast if secrets are missing (empty values embed in build and break Supabase).
+      - name: Check Supabase secrets
+        run: |
+          if [ -z "${{ secrets.SUPABASE_URL }}" ] || [ -z "${{ secrets.SUPABASE_ANON_KEY }}" ]; then
+            echo "::error::Set repository secrets SUPABASE_URL and SUPABASE_ANON_KEY (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+
       - name: Build Flutter Web (WASM)
         run: |
           flutter build web --wasm --release \
-          --base-href=/${{ github.event.repository.name }}/ \
-          --dart-define=ENV=prod \
-          --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
-          --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
+            --base-href=/${{ github.event.repository.name }}/ \
+            --dart-define=ENV=prod \
+            --dart-define=SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
+            --dart-define=SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
 
-      # Upload build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: build/web
 
-      # Deploy
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
